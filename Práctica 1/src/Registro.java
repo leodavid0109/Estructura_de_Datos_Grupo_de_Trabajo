@@ -1,4 +1,3 @@
-package practica1;
 
 import java.io.*;
 import java.util.*;

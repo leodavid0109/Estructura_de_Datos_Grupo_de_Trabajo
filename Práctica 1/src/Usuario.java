@@ -1,4 +1,4 @@
-package practica1;
+
 
 public class Usuario {
 	private long id;
