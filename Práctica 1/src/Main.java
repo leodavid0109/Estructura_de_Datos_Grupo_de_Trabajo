@@ -1,5 +1,6 @@
 
 import java.util.Scanner;
+
 import java.util.Random;
 
 public class Main {
@@ -52,10 +53,10 @@ public class Main {
 				registro.buscarUsuarioPorPosicion(posicion);
 				break;
 			case 6:
-				registro.toFile("usuarios.txt");
+				Registro.toFile("usuarios.txt");
 				break;
 			case 7:
-				registro.importFile("usuarios.txt");
+				Registro.importFile("usuarios.txt");
 				break;
 			case 0:
 				System.out.println("Saliendo del programa.");
@@ -82,12 +83,7 @@ public class Main {
 		if (registro.getNoRegistro() == 0) {
 			System.out.println("No hay usuarios");
 		}
-		for (int i = 0; i < registro.getNoRegistro(); i++) {
-			Usuario usuario = registro.getRegistro()[i];
-			if (usuario != null) {
-				System.out.println(usuario.getId());
-			}
-		}
+		Main.impresiónUsuarios(registro.getRegistro());
 	}
 
 	private static void ordenarRegistroPorId(Registro registro) {
@@ -230,5 +226,29 @@ public class Main {
 		} else {
 			System.out.println("No se pudo agregar el usuario.");
 		}
+	}
+	
+	private static void impresiónUsuarios(Usuario[] usuarios){
+		String[] indices_tabla = {"ID", "NOMBRE", "FECHA NACIMIENTO", "CIUDAD NATAL", "DIRECCIÓN", "TELÉFONO", "EMAIL"};
+		
+		System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
+		System.out.printf("%4s %8s %20s %10s %10s %15s %20s %20s", 
+				"#", indices_tabla[0], indices_tabla[1], indices_tabla[2], indices_tabla[3], indices_tabla[4], indices_tabla[5], indices_tabla[6]);
+		System.out.println();
+		System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
+		int i = 1;
+		for (Usuario usuario : usuarios) {
+			if(usuario == null) {
+				break;
+			}
+			System.out.printf("%4d %8d %20s %10s %10s %15s %20d %20s", 
+					i, usuario.getId(), usuario.getNombre(), usuario.getFecha_nac(), usuario.getCiudad_nac(), usuario.getDir(),
+					usuario.getTel(), usuario.getEmail());
+			System.out.println();
+			i++;
+		}
+		System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
+
+		return;
 	}
 }

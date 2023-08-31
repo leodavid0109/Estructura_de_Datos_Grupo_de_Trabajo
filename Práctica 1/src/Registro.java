@@ -58,7 +58,7 @@ public class Registro {
 		return null;
 	}
 
-	public void toFile(String fileName) {
+	public static void toFile(String fileName) {
 		try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
 			for (int i = 0; i < noRegistro; i++) {
 				Usuario usuario = registro[i];
@@ -77,7 +77,7 @@ public class Registro {
 		}
 	}
 
-	public void importFile(String fileName) {
+	public static void importFile(String fileName) {
 		try (Scanner scanner = new Scanner(new File(fileName))) {
 			while (scanner.hasNextLine()) {
 				String[] data = scanner.nextLine().split(",");
