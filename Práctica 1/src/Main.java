@@ -53,10 +53,10 @@ public class Main {
 				registro.buscarUsuarioPorPosicion(posicion);
 				break;
 			case 6:
-				Registro.toFile("usuarios.txt");
+				registro.toFile("Registro de Usuarios.txt");
 				break;
 			case 7:
-				Registro.importFile("usuarios.txt");
+				registro.importFile("Registro de Usuarios.txt");
 				break;
 			case 0:
 				System.out.println("Saliendo del programa.");
@@ -82,6 +82,7 @@ public class Main {
 		System.out.println("==== Lista de Usuarios ====");
 		if (registro.getNoRegistro() == 0) {
 			System.out.println("No hay usuarios");
+			return;
 		}
 		Main.impresiónUsuarios(registro.getRegistro());
 	}
@@ -231,23 +232,23 @@ public class Main {
 	private static void impresiónUsuarios(Usuario[] usuarios){
 		String[] indices_tabla = {"ID", "NOMBRE", "FECHA NACIMIENTO", "CIUDAD NATAL", "DIRECCIÓN", "TELÉFONO", "EMAIL"};
 		
-		System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
-		System.out.printf("%4s %8s %20s %10s %10s %15s %20s %20s", 
+		System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+		System.out.printf("%4s %8s %20s %20s %20s %80s %15s %27s", 
 				"#", indices_tabla[0], indices_tabla[1], indices_tabla[2], indices_tabla[3], indices_tabla[4], indices_tabla[5], indices_tabla[6]);
 		System.out.println();
-		System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
+		System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 		int i = 1;
 		for (Usuario usuario : usuarios) {
 			if(usuario == null) {
 				break;
 			}
-			System.out.printf("%4d %8d %20s %10s %10s %15s %20d %20s", 
+			System.out.printf("%4d %8d %20s %20s %20s %80s %15d %27s", 
 					i, usuario.getId(), usuario.getNombre(), usuario.getFecha_nac(), usuario.getCiudad_nac(), usuario.getDir(),
 					usuario.getTel(), usuario.getEmail());
 			System.out.println();
 			i++;
 		}
-		System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------");
+		System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
 		return;
 	}

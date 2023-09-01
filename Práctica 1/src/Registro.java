@@ -58,17 +58,18 @@ public class Registro {
 		return null;
 	}
 
-	public static void toFile(String fileName) {
+	public void toFile(String fileName) {
+		String[] encabezados = {"ID", "NOMBRE", "FECHA NACIMIENTO", "CIUDAD NATAL", "DIRECCIÓN", "TELÉFONO", "EMAIL"};
 		try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
+			writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+			writer.write(String.format("%-4s %-8s %-20s %-20s %-20s %-80s %-15s %-27s\n", "#", encabezados[0], encabezados[1], encabezados[2], encabezados[3], encabezados[4], encabezados[5], encabezados[6]));
+			writer.print("\n");
+			writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 			for (int i = 0; i < noRegistro; i++) {
 				Usuario usuario = registro[i];
 				if (usuario != null) {
-					writer.println(usuario.getId() + "," + usuario.getNombre() + "," + usuario.getFecha_nac().getDd()
-							+ "/" + usuario.getFecha_nac().getMm() + "/" + usuario.getFecha_nac().getAa() + ","
-							+ usuario.getCiudad_nac() + "," + usuario.getDir().getCalle() + ","
-							+ usuario.getDir().getNoCalle() + "," + usuario.getDir().getNomenclatura() + ","
-							+ usuario.getDir().getBarrio() + "," + usuario.getDir().getCiudad() + "," + usuario.getTel()
-							+ "," + usuario.getEmail());
+					writer.write(String.format("%-4d %-8d %-20s %-20s %-20s %-80s %-15d %-27s\n", i, usuario.getId(), usuario.getNombre(), usuario.getFecha_nac(), usuario.getCiudad_nac(), usuario.getDir(),
+							usuario.getTel(), usuario.getEmail()));
 				}
 			}
 			System.out.println("Datos guardados en el archivo: " + fileName);
@@ -77,7 +78,7 @@ public class Registro {
 		}
 	}
 
-	public static void importFile(String fileName) {
+	public void importFile(String fileName) {
 		try (Scanner scanner = new Scanner(new File(fileName))) {
 			while (scanner.hasNextLine()) {
 				String[] data = scanner.nextLine().split(",");

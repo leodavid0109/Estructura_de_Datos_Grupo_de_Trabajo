@@ -19,8 +19,8 @@ public class Direccion {
 
 	@Override
 	public String toString() {
-		return "Calle: " + calle + ", No. Calle: " + noCalle + ", Nomenclatura: " + nomenclatura + ", Barrio: " + barrio
-				+ ", Ciudad: " + ciudad;
+		return "Calle " + calle + ", No. " + noCalle + ", " + nomenclatura + ", " + barrio
+				+ ", " + ciudad;
 	}
 
 	// Gets y sets

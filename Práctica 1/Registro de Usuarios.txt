@@ -1,0 +1,9 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#    ID       NOMBRE               FECHA NACIMIENTO     CIUDAD NATAL         DIRECCIÓN                                                                        TELÉFONO        EMAIL                      
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+0    68       UsuarioRandom68      20/10/2019           CiudadRandom2        Calle CalleRandom, No. 110, NomenclaturaRandom, BarrioRandom, CiudadRandom       3613030394      usuario68@random.com       
+1    374      UsuarioRandom374     18/3/2011            CiudadRandom8        Calle CalleRandom, No. 436, NomenclaturaRandom, BarrioRandom, CiudadRandom       3574579436      usuario374@random.com      
+2    616      UsuarioRandom616     3/12/2013            CiudadRandom6        Calle CalleRandom, No. 431, NomenclaturaRandom, BarrioRandom, CiudadRandom       3446440828      usuario616@random.com      
+3    743      UsuarioRandom743     17/8/2016            CiudadRandom1        Calle CalleRandom, No. 378, NomenclaturaRandom, BarrioRandom, CiudadRandom       3610383728      usuario743@random.com      
+4    997      UsuarioRandom997     8/11/2005            CiudadRandom2        Calle CalleRandom, No. 457, NomenclaturaRandom, BarrioRandom, CiudadRandom       3549888956      usuario997@random.com      
