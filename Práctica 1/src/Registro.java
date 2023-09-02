@@ -80,25 +80,36 @@ public class Registro {
 
 	public void importFile(String fileName) {
 		try (Scanner scanner = new Scanner(new File(fileName))) {
+			//Descartamos las tres primeras líneas del archivo
+			//Estas líneas corresponden a los encabezados, y a las dos líneas de separación para generación de formato como tabla.
+			scanner.nextLine();
+			scanner.nextLine();
+			scanner.nextLine();
+			scanner.nextLine();
 			while (scanner.hasNextLine()) {
-				String[] data = scanner.nextLine().split(",");
-				long id = Long.parseLong(data[0]);
-				String nombre = data[1];
-				String[] fechaData = data[2].split("/");
+				String registro = scanner.nextLine();
+				System.out.println(registro);
+				long id = Long.parseLong(registro.substring(4, 13).trim());
+				String nombre = registro.substring(13, 33).trim();
+				String[] fechaData = registro.substring(33, 53).trim().split("/");
 				int dd = Integer.parseInt(fechaData[0]);
 				int mm = Integer.parseInt(fechaData[1]);
 				int aa = Integer.parseInt(fechaData[2]);
 				Fecha fecha = new Fecha(dd, mm, aa);
-				String ciudadNac = data[3];
-				String calle = data[4];
-				int noCalle = Integer.parseInt(data[5]);
-				String nomenclatura = data[6];
-				String barrio = data[7];
-				String ciudad = data[8];
-				Direccion direccion = new Direccion(calle, noCalle, nomenclatura, barrio, ciudad);
-				long tel = Long.parseLong(data[9]);
-				String email = data[10];
-				Usuario usuario = new Usuario(id, nombre, fecha, ciudadNac, direccion, tel, email);
+				String ciudadNac = registro.substring(53, 73).trim();
+				String[] direccion = registro.substring(73, 153).trim().split(", ");
+				for (String string : direccion){
+					System.out.println(string);
+				}
+				String calle = direccion[0].substring(6).trim();
+				int noCalle = Integer.parseInt(direccion[1].substring(4).trim());
+				String nomenclatura = direccion[2];
+				String barrio = direccion[3];
+				String ciudad = direccion[4];
+				Direccion direccion_final = new Direccion(calle, noCalle, nomenclatura, barrio, ciudad);
+				long tel = Long.parseLong(registro.substring(153, 168).trim());
+				String email = registro.substring(168).trim();
+				Usuario usuario = new Usuario(id, nombre, fecha, ciudadNac, direccion_final, tel, email);
 				agregar(usuario);
 			}
 			System.out.println("Datos importados desde el archivo: " + fileName);
