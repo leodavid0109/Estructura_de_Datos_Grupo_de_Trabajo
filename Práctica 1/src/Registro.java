@@ -88,7 +88,6 @@ public class Registro {
 			scanner.nextLine();
 			while (scanner.hasNextLine()) {
 				String registro = scanner.nextLine();
-				System.out.println(registro);
 				long id = Long.parseLong(registro.substring(4, 13).trim());
 				String nombre = registro.substring(13, 33).trim();
 				String[] fechaData = registro.substring(33, 53).trim().split("/");
@@ -98,9 +97,6 @@ public class Registro {
 				Fecha fecha = new Fecha(dd, mm, aa);
 				String ciudadNac = registro.substring(53, 73).trim();
 				String[] direccion = registro.substring(73, 153).trim().split(", ");
-				for (String string : direccion){
-					System.out.println(string);
-				}
 				String calle = direccion[0].substring(6).trim();
 				int noCalle = Integer.parseInt(direccion[1].substring(4).trim());
 				String nomenclatura = direccion[2];
