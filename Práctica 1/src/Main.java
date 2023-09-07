@@ -245,7 +245,7 @@ public class Main {
 				"#", indices_tabla[0], indices_tabla[1], indices_tabla[2], indices_tabla[3], indices_tabla[4], indices_tabla[5], indices_tabla[6]);
 		System.out.println();
 		System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-		int i = 1;
+		int i = 0;
 		for (Usuario usuario : usuarios) {
 			if(usuario == null) {
 				break;
