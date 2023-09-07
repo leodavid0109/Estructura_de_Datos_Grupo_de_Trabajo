@@ -26,13 +26,32 @@ public class Registro {
 		}
 	}
 
-	public void eliminar(int posicion) {
-		if (posicion >= 0 && posicion < noRegistro) {
+	public void eliminar(long id) {
+		int posicion = retornarPosicion(id);
+		if (posicion != -1){
 			registro[posicion] = null;
-			System.out.println("Usuario en la posición " + posicion + " eliminado.");
+			ajusteRegistro(posicion);
+			System.out.println("Usuario con ID " + id + " eliminado.");
 		} else {
-			System.out.println("Posición inválida.");
+			System.out.println("No se encuentra un usuario con este ID.");
 		}
+	}
+
+	public void ajusteRegistro(int posicion){
+		for (int i = posicion; i < noRegistro-1; i++){
+			registro[i] = registro[i+1];
+		}
+		registro[noRegistro-1] = null;
+		noRegistro--;
+	}
+
+	public int retornarPosicion(long id){
+		for (int i = 0; i < noRegistro; i++) {
+			if (registro[i] != null && registro[i].getId() == id) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	public void buscarUsuarioPorPosicion(int posicion) {
