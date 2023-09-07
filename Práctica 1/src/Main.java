@@ -166,6 +166,10 @@ public class Main {
 			System.out.print("Ingrese el ID del usuario: ");
 			long nuevoId = scanner.nextLong();
 			scanner.nextLine(); // Consumir el salto de línea pendiente
+			if(registro.buscarUsuario(nuevoId)!=null){
+				System.out.println("Ya existe un usuario con id: "+nuevoId);
+				return;
+			}
 
 			System.out.print("Ingrese el nombre del usuario: ");
 			String nuevoNombre = scanner.nextLine();
@@ -211,6 +215,9 @@ public class Main {
 		// Generar datos aleatorios
 		Random random = new Random();
 		long nuevoId = random.nextInt(1000) + 1; // ID entre 1 y 1000
+		while(registro.buscarUsuario(nuevoId)!=null){
+			nuevoId=nuevoId+1;
+		}
 		String nuevoNombre = "UsuarioRandom" + nuevoId;
 		Fecha nuevaFecha = new Fecha(random.nextInt(28) + 1, random.nextInt(12) + 1, random.nextInt(21) + 2000);
 		String nuevaCiudadNac = "CiudadRandom" + (random.nextInt(10) + 1); // Ciudad entre 1 y 10
