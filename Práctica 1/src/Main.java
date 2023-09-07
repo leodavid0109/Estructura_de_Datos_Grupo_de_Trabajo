@@ -40,9 +40,9 @@ public class Main {
 				}
 				break;
 			case 3:
-				System.out.print("Ingrese la posición (índice) del usuario que desea eliminar: ");
-				int posicionEliminar = scanner.nextInt();
-				registro.eliminar(posicionEliminar);
+				System.out.print("Ingrese el ID del usuario que desea eliminar: ");
+				int IDUsuarioEliminar = scanner.nextInt();
+				registro.eliminar(IDUsuarioEliminar);
 				break;
 			case 4:
 				mostrarListaUsuarios(registro);
@@ -185,11 +185,12 @@ public class Main {
 			String nuevaCiudadNac = scanner.nextLine();
 
 			System.out.print("Ingrese la dirección (calle, noCalle, nomenclatura, barrio, ciudad): ");
-			String nuevaCalle = scanner.next();
-			int nuevoNoCalle = scanner.nextInt();
-			String nuevaNomenclatura = scanner.next();
-			String nuevoBarrio = scanner.next();
-			String nuevaCiudad = scanner.next();
+			String[] direccion = scanner.nextLine().split(", ");
+			String nuevaCalle = direccion[0];
+			int nuevoNoCalle = Integer.parseInt(direccion[1]);
+			String nuevaNomenclatura = direccion[2];
+			String nuevoBarrio = direccion[3];
+			String nuevaCiudad = direccion[4];
 			Direccion nuevaDireccion = new Direccion(nuevaCalle, nuevoNoCalle, nuevaNomenclatura, nuevoBarrio,
 					nuevaCiudad);
 
