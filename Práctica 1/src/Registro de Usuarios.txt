@@ -2,8 +2,7 @@
 #    ID       NOMBRE               FECHA NACIMIENTO     CIUDAD NATAL         DIRECCIÓN                                                                        TELÉFONO        EMAIL                      
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-0    53       Pepito               12/7/2000            Lisboa               Calle Transversal, No. 294, Sur, Laureles, Madrid                                3985010040      pepito@random.com
+0    53       Pepito               12/7/2000            Lisboa               Calle Transversal, No. 294, Sur, Laureles, Madrid                                3985010040      pepito@random.com          
 1    124      Jorge Humberto       22/5/3               La Ceja              Calle Calle, No. 4, BIS, El Parque, La Ceja                                      3125097849      jorge@gmail.com            
-2    189      Leonard David        1/9/5                Facatativá           Calle Carrera, No. 18, Norte, Las Tinguas, Medellín                              3459821675      david@gmail.com            
-3    222      Tomás Escobar        27/10/4              Medellín             Calle Avenida, No. 4, Sur, Milán, Envigado                                       3657192408      tomas@gmail.com            
-4    956      Juanito              10/8/2020            Madagascar           Calle Avenida, No. 88, BIS, Los Colores, Moscú                                   3850295631      juanito@random.com
+2    222      Tomás Escobar        27/10/4              Medellín             Calle Avenida, No. 4, Sur, Milán, Envigado                                       3657192408      tomas@gmail.com            
+3    956      Juanito              10/8/2020            Madagascar           Calle Avenida, No. 88, BIS, Los Colores, Moscú                                   3850295631      juanito@random.com         
