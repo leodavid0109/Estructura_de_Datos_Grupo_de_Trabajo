@@ -130,4 +130,8 @@ public class DoubleList {
             size++;
         }
     }
+    
+    public int size() {
+        return size;
+    }
 }

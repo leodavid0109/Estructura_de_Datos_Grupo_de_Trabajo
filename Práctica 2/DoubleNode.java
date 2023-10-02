@@ -38,4 +38,13 @@ public class DoubleNode {
     public DoubleNode getPrev() {
         return prev;
     }
+    
+    public void remove() {
+        if (prev != null) {
+            prev.setNext(next);
+        }
+        if (next != null) {
+            next.setPrev(prev);
+        }
+    }
 }
