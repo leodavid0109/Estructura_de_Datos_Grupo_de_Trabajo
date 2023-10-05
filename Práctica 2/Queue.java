@@ -10,7 +10,7 @@ public class Queue {
     }
 
     public boolean isEmpty() {
-        return data.isEmpty();
+        return size() == 0;
     }
 
     public void enqueue(Object e) {

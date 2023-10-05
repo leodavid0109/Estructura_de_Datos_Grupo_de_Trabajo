@@ -10,7 +10,7 @@ public class Stack {
     }
 
     public boolean isEmpty() {
-        return data.isEmpty();
+        return size() == 0;
     }
 
     public void push(Object e) {

@@ -10,38 +10,34 @@ public class ArrayQueue {
     }
 
     public int size() {
-        if (isEmpty()) {
-            return 0;
-        }
-        return rear - first + 1;
+        int temp;
+        temp = data.length - first + rear;
+        temp = temp % data.length + 1;
+        return temp;
     }
 
     public boolean isEmpty() {
-        return first == -1 || first > rear;
+        return size() == 0;
     }
 
     public void enqueue(Object e) {
-        if (isEmpty()) {
-            first = 0;
-            rear = 0;
-        } else {
-            rear++;
+        if (size() < data.length){ //Verificamos disponibilidad
+            //Calculamos la posición con mod (%)
+            rear = (rear + 1) % data.length;
+            data[rear] = e; //Insertamos el dato en la cola
         }
-        data[rear] = e;
     }
 
     public Object dequeue() {
         if (isEmpty()) {
-            return null;
+            return null; //Si la cola está vacía, retornamos nulo
         }
-        Object e = data[first];
-        if (first == rear) {
-            first = -1;
-            rear = -1;
-        } else {
-            first++;
+        else{
+            Object temp = data[first]; //Almacenamos el dato a retornar
+            data[first] = null; //Eliminamos el dato de la cola
+            first = (first + 1) % data.length; //Calculamos la nueva posición de first
+            return temp; //Retornamos el dato
         }
-        return e;
     }
 
     public Object first() {

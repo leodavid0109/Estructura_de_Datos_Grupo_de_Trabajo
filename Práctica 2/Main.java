@@ -2,6 +2,11 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
+        Registro registro = new Registro(10);
+        //Cargar los empleados guardados en el archivo de texto empleados.txt
+        registro.importFileEmpleados("Empleados.txt");
+
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to the message app. Please log in.");
         System.out.print("Identification number: ");
