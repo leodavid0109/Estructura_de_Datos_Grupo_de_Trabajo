@@ -79,10 +79,10 @@ public class Registro {
     public void toFileEmpleados(String fileName) {
         String[] encabezados = {"NOMBRE", "CC", "FECHA NACIMIENTO", "CIUDAD NATAL", "TELÉFONO", "EMAIL", "DIRECCIÓN"};
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-            writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             writer.write(String.format("%-4s %-20s %-8s %-20s %-20s %-15s %-27s %-80s\n", "#", encabezados[0], encabezados[1], encabezados[2], encabezados[3], encabezados[4], encabezados[5], encabezados[6]));
             writer.print("\n");
-            writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
             for (int i = 0; i < noRegistro; i++) {
                 Empleado usuario = registro[i];
                 if (usuario != null) {
@@ -132,13 +132,44 @@ public class Registro {
         }
     }
 
+    // Método de lectura de archivo con el estilo de impresión enviado en la Práctica
+    // Su uso inicial es el de permitir la transición de este estilo de archivo al nuevo donde las tablas son implementadas.
+    public void importFileEmpleadosP(String fileName) {
+        try (Scanner scanner = new Scanner(new File(fileName))) {
+            while (scanner.hasNextLine()) {
+                String[] registro = scanner.nextLine().split(" ");
+                String nombre = registro[0];
+                long id = Long.parseLong(registro[1]);
+                int dd = Integer.parseInt(registro[2]);
+                int mm = Integer.parseInt(registro[3]);
+                int aa = Integer.parseInt(registro[4]);
+                Fecha fecha = new Fecha(dd, mm, aa);
+                String ciudadNac = registro[5];
+                long tel = Long.parseLong(registro[6]);
+                String email = registro[7];
+                String[] partesCalle = registro[8].split("(?<=\\D)(?=\\d)");
+                String calle = partesCalle[0];
+                int noCalle = Integer.parseInt(partesCalle[1]);
+                String nomenclatura = registro[9];
+                String barrio = registro[10];
+                String ciudad = registro[11];
+                Direccion direccion_final = new Direccion(calle, noCalle, nomenclatura, barrio, ciudad);
+                Empleado empleado = new Empleado(id, nombre, fecha, ciudadNac, tel, email, direccion_final);
+                agregar(empleado);
+            }
+            System.out.println("Datos importados desde el archivo: " + fileName);
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo no encontrado: " + e.getMessage());
+        }
+    }
+
     public void toFilePassword(String fileName) {
         String[] encabezados = {"CC", "CONTRASEÑA", "PUESTO"};
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-            writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            writer.println("------------------------------------------------");
             writer.write(String.format("%-4s %-8s %-20s %-20s\n", "#", encabezados[0], encabezados[1], encabezados[2]));
             writer.print("\n");
-            writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            writer.println("------------------------------------------------");
             for (int i = 0; i < noRegistro; i++) {
                 Empleado usuario = registro[i];
                 if (usuario != null) {
@@ -171,6 +202,33 @@ public class Registro {
                             case "Empleado":
                                 registro[i].setPuesto(Categoria.Empleado);
                             case "Administrador":
+                                registro[i].setPuesto(Categoria.Administrador);
+                        }
+                    }
+                }
+            }
+            System.out.println("Datos importados desde el archivo: " + fileName);
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo no encontrado: " + e.getMessage());
+        }
+    }
+
+    // Método de lectura de archivo con el estilo de impresión enviado en la Práctica
+    // Su uso inicial es el de permitir la transición de este estilo de archivo al nuevo donde las tablas son implementadas.
+    public void importFilePasswordP(String fileName) {
+        try (Scanner scanner = new Scanner(new File(fileName))) {
+            while (scanner.hasNextLine()) {
+                String[] linea = scanner.nextLine().split(" ");
+                long id = Long.parseLong(linea[0]);
+                String contrasena = linea[1];
+                String categoria = linea[2];
+                for (int i = 0; i < noRegistro; i++){
+                    if (id == registro[i].getCedula()){
+                        registro[i].setContrasena(contrasena);
+                        switch (categoria) {
+                            case "empleado":
+                                registro[i].setPuesto(Categoria.Empleado);
+                            case "administrador":
                                 registro[i].setPuesto(Categoria.Administrador);
                         }
                     }

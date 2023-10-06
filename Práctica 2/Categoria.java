@@ -8,5 +8,6 @@ public enum Categoria {
         ArrayList<Categoria> listaCategoria = new ArrayList<Categoria>();
         listaCategoria.add(Empleado);
         listaCategoria.add(Administrador);
+        return listaCategoria;
     }
 }

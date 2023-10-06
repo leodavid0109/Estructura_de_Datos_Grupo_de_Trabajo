@@ -5,8 +5,11 @@ public class Main {
 
         Registro registro = new Registro(10);
         //Cargar los empleados guardados en el archivo de texto empleados.txt
-        registro.importFileEmpleados("Empleados.txt");
-        registro.importFilePassword("Password.txt");
+        registro.importFileEmpleadosP("empleadosOriginal.txt");
+        registro.importFilePasswordP("passwordOriginal.txt");
+
+        registro.toFileEmpleados("Empleados.txt");
+        registro.toFilePassword("Password.txt");
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to the message app. Please log in.");
