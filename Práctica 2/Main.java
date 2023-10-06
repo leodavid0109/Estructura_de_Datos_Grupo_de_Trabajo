@@ -40,12 +40,11 @@ public class Main {
         if (usuario.getPuesto() == Categoria.Empleado){
             boolean running = true;
             while (running) {
-                System.out.println("Please select an option:");
-                System.out.println("1. Check inbox");
-                System.out.println("2. Write message");
-                System.out.println("3. View drafts");
-                System.out.println("4. Discard draft");
-                System.out.println("5. Send draft");
+                System.out.println("Por favor seleccione una opción:");
+                System.out.println("1. Bandeja de Entrada");
+                System.out.println("2. Mensajes leidos");
+                System.out.println("3. Borradores");
+                System.out.println("4. Enviar Mensajes");
                 System.out.println("6. Exit");
                 int choice = scanner.nextInt();
                 scanner.nextLine(); // consume newline character
@@ -196,10 +195,9 @@ public class Main {
         if (nodo!=null){u= (Empleado) nodo.getData();}
 //        Recorremos nodo por nodo y luego asignamos a u el objeto almacenado en ese nodo
         while (nodo!=null) {
-            if (u.getCedula() == cedula && u.getContrasena()+"\n"==contrasena) {
+            if (u.getCedula() == cedula && u.getContrasena().equals(contrasena)) {
                 return u;
             }
-            System.out.println("Objeto "+u.getContrasena()+" ingresada: "+contrasena);
             nodo = nodo.getNext();
             if (nodo!=null){u= (Empleado) nodo.getData();}else{u=null;}
         }
