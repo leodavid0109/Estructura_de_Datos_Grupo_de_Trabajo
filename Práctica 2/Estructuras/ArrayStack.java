@@ -1,3 +1,5 @@
+package Estructuras;
+
 public class ArrayStack {
     private Object[] data;
     private int top;
@@ -21,7 +23,7 @@ public class ArrayStack {
             data[top] = e;
         }
         else{
-            System.out.println("Stack overflow");
+            System.out.println("Estructuras.Stack overflow");
         }
     }
 

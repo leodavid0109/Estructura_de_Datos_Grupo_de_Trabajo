@@ -1,3 +1,5 @@
+package Estructuras;
+
 public class List {
     private Node head;
     private Node tail;

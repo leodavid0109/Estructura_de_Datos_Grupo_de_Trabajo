@@ -1,3 +1,5 @@
+package Estructuras;
+
 public class ArrayQueue {
     private Object[] data;
     private int first;

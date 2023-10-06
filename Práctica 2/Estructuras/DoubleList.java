@@ -1,3 +1,5 @@
+package Estructuras;
+
 public class DoubleList {
     private DoubleNode head;
     private DoubleNode tail;
@@ -14,7 +16,11 @@ public class DoubleList {
     }
 
     public Boolean isEmpty(){
-        return size == 0;
+        if(size ==0){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public DoubleNode first(){
@@ -35,8 +41,9 @@ public class DoubleList {
             n.setNext(head);
             head.setPrev(n);
             head = n;
-            size++;
         }
+        size++;
+
     }
 
     public void addLast(Object e){
@@ -49,8 +56,9 @@ public class DoubleList {
             tail.setNext(n);
             n.setPrev(tail);
             tail = n;
-            size++;
         }
+        size++;
+
     }
 
     public Object removeFirst(){
@@ -130,7 +138,8 @@ public class DoubleList {
             size++;
         }
     }
-    
+
+
     public int size() {
         return size;
     }

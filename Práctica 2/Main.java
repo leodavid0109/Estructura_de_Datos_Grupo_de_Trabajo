@@ -1,9 +1,9 @@
 import java.util.Scanner;
-
+import Estructuras.*;
 public class Main {
     public static void main(String[] args) {
 
-        Registro registro = new Registro(10);
+        Registro registro = new Registro();
         //Cargar los empleados guardados en el archivo de texto empleados.txt
         registro.importFileEmpleadosP("empleadosOriginal.txt");
         registro.importFilePasswordP("passwordOriginal.txt");
@@ -12,27 +12,30 @@ public class Main {
         registro.toFilePassword("Password.txt");
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Welcome to the message app. Please log in.");
-        System.out.print("Identification number: ");
-        String id = scanner.nextLine();
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
+        System.out.println("Bienvenidos a la aplicación de mesajeria.Inicie Sesión.");
+        System.out.print("Número de Identificación: ");
+        long cedula = scanner.nextLong();
+        scanner.nextLine();
+        System.out.print("Contraseña: ");
+        String contrasena = scanner.nextLine();
         System.out.println();
+
+
 
         boolean loggedIn = false;
 
         // check login credentials
-        Empleado usuario = checkLogin(id, password);
+        Empleado usuario = checkLogin(cedula, contrasena,registro);
         if (usuario != null) {
             loggedIn = true;
-            System.out.println("Login successful.");
+            System.out.println("¡Bienvenido!Has ingresado correctamente.");
         } else {
-            System.out.println("Invalid login credentials.");
+            System.out.println("¡Error!Las credenciales no coinciden, intente nuevamente.");
             scanner.close();
             return;
         }
 
-        Inbox inbox = new Inbox(id);
+//        Inbox inbox = new Inbox(id);
 
         if (usuario.getPuesto() == Categoria.Empleado){
             boolean running = true;
@@ -48,7 +51,7 @@ public class Main {
                 scanner.nextLine(); // consume newline character
                 switch (choice) {
                     case 1:
-                        inbox.readMessage();
+//                        inbox.readMessage();
                         break;
                     case 2:
                         System.out.print("Enter recipient: ");
@@ -61,7 +64,7 @@ public class Main {
                         String title = scanner.nextLine();
                         System.out.print("Enter message content: ");
                         String content = scanner.nextLine();
-                        Message message = new Message(id, recipient, title, content);
+//                        Message message = new Message(id, recipient, title, content);
                         System.out.println("1. Save as draft");
                         System.out.println("2. Discard");
                         System.out.println("3. Send");
@@ -76,7 +79,7 @@ public class Main {
                                 System.out.println("Message discarded.");
                                 break;
                             case 3:
-                                inbox.addMessage(message);
+//                                inbox.addMessage(message);
                                 System.out.println("Message sent.");
                                 break;
                             default:
@@ -121,7 +124,7 @@ public class Main {
                 scanner.nextLine(); // consume newline character
                 switch (choice) {
                     case 1:
-                        inbox.readMessage();
+//                        inbox.readMessage();
                         break;
                     case 2:
                         System.out.print("Enter recipient: ");
@@ -134,7 +137,7 @@ public class Main {
                         String title = scanner.nextLine();
                         System.out.print("Enter message content: ");
                         String content = scanner.nextLine();
-                        Message message = new Message(id, recipient, title, content);
+//                        Message message = new Message(id, recipient, title, content);
                         System.out.println("1. Save as draft");
                         System.out.println("2. Discard");
                         System.out.println("3. Send");
@@ -149,7 +152,7 @@ public class Main {
                                 System.out.println("Message discarded.");
                                 break;
                             case 3:
-                                inbox.addMessage(message);
+//                                inbox.addMessage(message);
                                 System.out.println("Message sent.");
                                 break;
                             default:
@@ -186,10 +189,21 @@ public class Main {
         scanner.close();
     }
 
-    private static Empleado checkLogin(String id, String password) {
+    private static Empleado checkLogin(long cedula, String contrasena,Registro registro) {
         // check login credentials in database or file
-        Empleado empleado = null;
-        return empleado;
+        DoubleNode nodo = registro.first();
+        Empleado u = null;
+        if (nodo!=null){u= (Empleado) nodo.getData();}
+//        Recorremos nodo por nodo y luego asignamos a u el objeto almacenado en ese nodo
+        while (nodo!=null) {
+            if (u.getCedula() == cedula && u.getContrasena()+"\n"==contrasena) {
+                return u;
+            }
+            System.out.println("Objeto "+u.getContrasena()+" ingresada: "+contrasena);
+            nodo = nodo.getNext();
+            if (nodo!=null){u= (Empleado) nodo.getData();}else{u=null;}
+        }
+        return null;
     }
 
     private static boolean userExists(String username) {

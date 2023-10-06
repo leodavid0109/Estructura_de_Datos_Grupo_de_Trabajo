@@ -1,7 +1,9 @@
-public class Queue {
+package Estructuras;
+
+public class Stack {
     private List data;
 
-    public Queue() {
+    public Stack() {
         data = new List();
     }
 
@@ -13,18 +15,18 @@ public class Queue {
         return size() == 0;
     }
 
-    public void enqueue(Object e) {
-        data.addLast(e);
+    public void push(Object e) {
+        data.addFirst(e);
     }
 
-    public Object dequeue() {
+    public Object pop() {
         if (isEmpty()) {
             return null;
         }
         return data.removeFirst();
     }
 
-    public Object first() {
+    public Object top() {
         if (isEmpty()) {
             return null;
         }
