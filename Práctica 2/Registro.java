@@ -77,41 +77,41 @@ public class Registro {
         }
     }
 
-    public void importFileEmpleados(String fileName) {
-        try (Scanner scanner = new Scanner(new File(fileName))) {
-            //Descartamos las tres primeras líneas del archivo
-            //Estas líneas corresponden a los encabezados, y a las dos líneas de separación para generación de formato como tabla.
-            scanner.nextLine();
-            scanner.nextLine();
-            scanner.nextLine();
-            scanner.nextLine();
-            while (scanner.hasNextLine()) {
-                String registro = scanner.nextLine();
-                String nombre = registro.substring(4, 25).trim();
-                long id = Long.parseLong(registro.substring(25, 33).trim());
-                String[] fechaData = registro.substring(33, 53).trim().split("/");
-                int dd = Integer.parseInt(fechaData[0]);
-                int mm = Integer.parseInt(fechaData[1]);
-                int aa = Integer.parseInt(fechaData[2]);
-                Fecha fecha = new Fecha(dd, mm, aa);
-                String ciudadNac = registro.substring(53, 73).trim();
-                long tel = Long.parseLong(registro.substring(73, 88).trim());
-                String email = registro.substring(88, 115).trim();
-                String[] direccion = registro.substring(115).trim().split(", ");
-                String calle = direccion[0].substring(6).trim();
-                int noCalle = Integer.parseInt(direccion[1].substring(4).trim());
-                String nomenclatura = direccion[2];
-                String barrio = direccion[3];
-                String ciudad = direccion[4];
-                Direccion direccion_final = new Direccion(calle, noCalle, nomenclatura, barrio, ciudad);
-                Empleado empleado = new Empleado(id, nombre, fecha, ciudadNac, tel, email, direccion_final);
-                agregar(empleado);
-            }
-            System.out.println("Datos importados desde el archivo: " + fileName);
-        } catch (FileNotFoundException e) {
-            System.out.println("Archivo no encontrado: " + e.getMessage());
-        }
-    }
+//    public void importFileEmpleados(String fileName) {
+//        try (Scanner scanner = new Scanner(new File(fileName))) {
+//            //Descartamos las tres primeras líneas del archivo
+//            //Estas líneas corresponden a los encabezados, y a las dos líneas de separación para generación de formato como tabla.
+//            scanner.nextLine();
+//            scanner.nextLine();
+//            scanner.nextLine();
+//            scanner.nextLine();
+//            while (scanner.hasNextLine()) {
+//                String registro = scanner.nextLine();
+//                String nombre = registro.substring(4, 25).trim();
+//                long id = Long.parseLong(registro.substring(25, 33).trim());
+//                String[] fechaData = registro.substring(33, 53).trim().split("/");
+//                int dd = Integer.parseInt(fechaData[0]);
+//                int mm = Integer.parseInt(fechaData[1]);
+//                int aa = Integer.parseInt(fechaData[2]);
+//                Fecha fecha = new Fecha(dd, mm, aa);
+//                String ciudadNac = registro.substring(53, 73).trim();
+//                long tel = Long.parseLong(registro.substring(73, 88).trim());
+//                String email = registro.substring(88, 115).trim();
+//                String[] direccion = registro.substring(115).trim().split(", ");
+//                String calle = direccion[0].substring(6).trim();
+//                int noCalle = Integer.parseInt(direccion[1].substring(4).trim());
+//                String nomenclatura = direccion[2];
+//                String barrio = direccion[3];
+//                String ciudad = direccion[4];
+//                Direccion direccion_final = new Direccion(calle, noCalle, nomenclatura, barrio, ciudad);
+//                Empleado empleado = new Empleado(id, nombre, fecha, ciudadNac, tel, email, direccion_final);
+//                agregar(empleado);
+//            }
+//            System.out.println("Datos importados desde el archivo: " + fileName);
+//        } catch (FileNotFoundException e) {
+//            System.out.println("Archivo no encontrado: " + e.getMessage());
+//        }
+//    }
 
     // Método de lectura de archivo con el estilo de impresión enviado en la Práctica
     // Su uso inicial es el de permitir la transición de este estilo de archivo al nuevo donde las tablas son implementadas.
@@ -135,7 +135,9 @@ public class Registro {
                 String barrio = registro[10];
                 String ciudad = registro[11];
                 Direccion direccion_final = new Direccion(calle, noCalle, nomenclatura, barrio, ciudad);
-                Empleado empleado = new Empleado(id, nombre, fecha, ciudadNac, tel, email, direccion_final);
+//              Asignamos la bandeja de entrada
+                DoubleList bandejaEntrada = new DoubleList();
+                Empleado empleado = new Empleado(id, nombre, fecha, ciudadNac, tel, email, direccion_final,bandejaEntrada);
                 this.agregar(empleado);
             }
             System.out.println("Datos importados desde el archivo: " + fileName);
@@ -161,7 +163,6 @@ public class Registro {
                 if (nodo!=null){usuario= (Empleado) nodo.getData();}else{usuario = null;}
                 i++;
             }
-
             System.out.println("Datos guardados en el archivo: " + fileName);
         } catch (IOException e) {
             System.out.println("Error al escribir en el archivo: " + e.getMessage());
@@ -190,8 +191,10 @@ public class Registro {
                         switch (categoria){
                             case "Empleado":
                                 usuario.setPuesto(Categoria.Empleado);
+                                break;
                             case "Administrador":
                                 usuario.setPuesto(Categoria.Administrador);
+                                break;
                         }
                     }
                     nodo = nodo.getNext();
@@ -223,8 +226,10 @@ public class Registro {
                         switch (categoria){
                             case "empleado":
                                 usuario.setPuesto(Categoria.Empleado);
+                                break;
                             case "administrador":
                                 usuario.setPuesto(Categoria.Administrador);
+                                break;
                         }
                     }
                     nodo = nodo.getNext();
@@ -236,6 +241,7 @@ public class Registro {
             System.out.println("Archivo no encontrado: " + e.getMessage());
         }
     }
+
 
     public void addFirst(Empleado e){this.registro.addFirst(e);}
     public void addLast(Empleado e){this.registro.addLast(e);}

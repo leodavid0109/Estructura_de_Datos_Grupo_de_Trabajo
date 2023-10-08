@@ -50,7 +50,7 @@ public class Main {
                 scanner.nextLine(); // consume newline character
                 switch (choice) {
                     case 1:
-//                        inbox.readMessage();
+                        bandejaEntrada(usuario);
                         break;
                     case 2:
                         System.out.print("Enter recipient: ");
@@ -203,6 +203,15 @@ public class Main {
         }
         return null;
     }
+
+    public static void bandejaEntrada(Empleado usuario){
+        System.out.println("-----|Bandeja de Entrada|-----");
+        System.out.println("Por favor seleccione el mensaje que desee leer:");
+        usuario.getBandejaEntrada();
+
+    }
+
+
 
     private static boolean userExists(String username) {
         // check if user exists in database or file

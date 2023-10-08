@@ -7,10 +7,17 @@ public class Message {
     private String title;
     private String content;
 
-    public Message(String sender, String recipient, String title, String content) {
+    public Message(String sender, String recipient,String title, String content) {
         this.sender = sender;
         this.recipient = recipient;
         this.date = LocalDateTime.now();
+        this.title = title;
+        this.content = content;
+    }
+    public Message(String sender, String recipient,LocalDateTime dateTime,String title, String content) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.date = dateTime;
         this.title = title;
         this.content = content;
     }

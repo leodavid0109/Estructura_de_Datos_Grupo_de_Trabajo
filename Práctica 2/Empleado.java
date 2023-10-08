@@ -1,3 +1,11 @@
+import Estructuras.DoubleList;
+import Estructuras.DoubleNode;
+
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Scanner;
+
 public class Empleado {
     private long cedula;
     private String nombre;
@@ -8,8 +16,9 @@ public class Empleado {
     private Direccion dir;
     private String contrasena;
     private Categoria puesto;
+    private DoubleList bandejaEntrada;
 
-    public Empleado(long cedula, String nombre, Fecha fecha_nac, String ciudad_nac, long tel, String email, Direccion dir) {
+    public Empleado(long cedula, String nombre, Fecha fecha_nac, String ciudad_nac, long tel, String email, Direccion dir,DoubleList bandejaEntrada) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.fecha_nac = fecha_nac;
@@ -17,8 +26,10 @@ public class Empleado {
         this.tel = tel;
         this.email = email;
         this.dir = dir;
+        this.bandejaEntrada = bandejaEntrada;
         this.contrasena = null;
         this.puesto = null;
+        this.importBandejaEntrada();
     }
 
     public Empleado(long cedula, String nombre, Fecha fecha_nac, String ciudad_nac, long tel, String email, Direccion dir, String contrasena, Categoria puesto) {
@@ -31,6 +42,35 @@ public class Empleado {
         this.dir = dir;
         this.contrasena = contrasena;
         this.puesto = puesto;
+    }
+
+//    Metodos para la bandeja de entrada
+    public void importBandejaEntrada(){
+        try (Scanner scanner = new Scanner(new File("inbox/"+this.getCedula()+ "BA.txt"))){
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(",");
+                if (Long.parseLong(parts[1])== this.getCedula()) {
+                    Message message = new Message(parts[0], parts[1], LocalDateTime.parse( parts[2]), parts[3], parts[4]);
+                    bandejaEntrada.addFirst(message);
+                }
+            }
+            scanner.close();
+        } catch (IOException e) {
+            System.out.println("Bandeja de entrada de: " + this.getCedula() + " no encontrada");
+        }
+    }
+
+    public void getBandejaEntrada() {
+        DoubleNode nodo = this.bandejaEntrada.first();
+        if (nodo==null){
+            System.out.println("Su bandeja de entrada esta vacia");
+        }
+        System.out.println("#  De    Para   Titulo         Contenido");
+        while (nodo!=null){
+            System.out.println("1- "+nodo.getData());
+            nodo = nodo.getNext();
+        }
     }
 
     // ToString
@@ -76,6 +116,9 @@ public class Empleado {
     public Categoria getPuesto() {
         return puesto;
     }
+
+
+
 
     public void setCedula(long cedula) {
         this.cedula = cedula;
