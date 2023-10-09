@@ -1,49 +1,49 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 public class Message {
-    private String sender;
-    private String recipient;
-    private LocalDateTime date;
-    private String title;
-    private String content;
+    private Empleado de;
+    private Empleado para;
+    private LocalDateTime fecha;
+    private String titulo;
+    private String contenido;
 
-    public Message(String sender, String recipient,String title, String content) {
-        this.sender = sender;
-        this.recipient = recipient;
-        this.date = LocalDateTime.now();
-        this.title = title;
-        this.content = content;
+    public Message(Empleado de, Empleado para,String titulo, String contenido) {
+        this.de = de;
+        this.para = para;
+        this.fecha = LocalDateTime.now();
+        this.titulo = titulo;
+        this.contenido = contenido;
     }
-    public Message(String sender, String recipient,LocalDateTime dateTime,String title, String content) {
-        this.sender = sender;
-        this.recipient = recipient;
-        this.date = dateTime;
-        this.title = title;
-        this.content = content;
-    }
-
-    public String getSender() {
-        return sender;
+    public Message(Empleado de, Empleado para,LocalDateTime fecha,String titulo, String contenido) {
+        this.de = de;
+        this.para = para;
+        this.fecha = fecha;
+        this.titulo = titulo;
+        this.contenido = contenido;
     }
 
-    public String getRecipient() {
-        return recipient;
+    public Empleado getDe() {
+        return de;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public Empleado getPara() {
+        return para;
     }
 
-    public String getTitle() {
-        return title;
+    public LocalDateTime getFecha() {
+        return fecha;
     }
 
-    public String getContent() {
-        return content;
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getContenido() {
+        return contenido;
     }
 
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return sender + "," + recipient + "," + date.format(formatter) + "," + title + "," + content;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        return de.getCedula() + "," + para.getCedula() + "," + fecha.format(formatter) + "," + titulo + "," + contenido;
     }
 }

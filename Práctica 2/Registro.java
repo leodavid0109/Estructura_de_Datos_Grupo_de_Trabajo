@@ -2,6 +2,7 @@ import Estructuras.DoubleList;
 import Estructuras.DoubleNode;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Registro {
@@ -40,15 +41,15 @@ public class Registro {
     }
 
     public DoubleNode buscarNodoCedula(long cedula){
-        DoubleNode nodo = this.registro.first();
+        DoubleNode nodo = this.first();
         Empleado usuario = (Empleado) nodo.getData();
         while (nodo!=null){
             if (usuario.getCedula() == cedula) {
                 return nodo;
-            }else{
-                nodo.getNext();
-                usuario = (Empleado) nodo.getData();
             }
+            nodo.getNext();
+            nodo = nodo.getNext();
+            usuario = (Empleado) nodo.getData();
         }
         return null;
     }
@@ -135,9 +136,7 @@ public class Registro {
                 String barrio = registro[10];
                 String ciudad = registro[11];
                 Direccion direccion_final = new Direccion(calle, noCalle, nomenclatura, barrio, ciudad);
-//              Asignamos la bandeja de entrada
-                DoubleList bandejaEntrada = new DoubleList();
-                Empleado empleado = new Empleado(id, nombre, fecha, ciudadNac, tel, email, direccion_final,bandejaEntrada);
+                Empleado empleado = new Empleado(id, nombre, fecha, ciudadNac, tel, email, direccion_final);
                 this.agregar(empleado);
             }
             System.out.println("Datos importados desde el archivo: " + fileName);
@@ -242,6 +241,60 @@ public class Registro {
         }
     }
 
+    //    Metodos para la bandeja de entrada
+    public void importBandejaEntrada(){
+        DoubleNode nodo = this.first();
+        while (nodo!=null){
+            Empleado usuario = (Empleado) nodo.getData();
+            try {
+                Scanner scanner = new Scanner(new File("inbox/"+usuario.getCedula()+ "BA.txt"));
+                scanner.nextLine();
+                scanner.nextLine();
+                scanner.nextLine();
+                scanner.nextLine();
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    String[] parts = line.split(",");
+
+                    Empleado de =  (Empleado) this.buscarNodoCedula(Long.parseLong(parts[0])).getData();
+                    Empleado para =  (Empleado) this.buscarNodoCedula(Long.parseLong(parts[0])).getData();
+                    Message mensaje = new Message(de, para, LocalDateTime.parse( parts[2]), parts[3], parts[4]);
+                    usuario.agregarBandejaEntrada(mensaje);
+                }
+                scanner.close();
+            } catch (IOException e) {
+            }
+            nodo = nodo.getNext();
+        }
+    }
+
+//    Cargar bandeja de entrada
+    public void toFileInbox() {
+        String[] encabezados = {"De", "Para", "titulo", "Contenido", "Fecha", "EMAIL", "DIRECCIÓN"};
+        //          Pasamos usuario por usuario para cargar su bandeja de entrada
+        DoubleNode nodo = this.registro.first();
+        Empleado usuario;
+        while (nodo!=null) {
+            usuario = (Empleado) nodo.getData();
+            try (PrintWriter writer = new PrintWriter(new FileWriter("inbox/" + usuario.getCedula() + "BA.txt"))) {
+                writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                writer.write(String.format("%-4s %-20s %-8s %-20s %-20s %-15s\n", "#", encabezados[0], encabezados[1], encabezados[2], encabezados[3], encabezados[4], encabezados[5], encabezados[6]));
+                writer.print("\n");
+                writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+//              Pasamos mensaje por mensaje y lo guardamos en el archivo
+                DoubleNode mensajeNodo = usuario.getBandejaEntrada().first();
+                while (mensajeNodo != null) {
+                    Message mensaje = (Message) mensajeNodo.getData();
+                    writer.write(String.format("%-20s, %-8s, %-20s, %-20s, %-15s\n", mensaje.getDe().getCedula(), mensaje.getPara().getCedula(), mensaje.getTitulo(), mensaje.getContenido(), mensaje.getFecha()));
+                    mensajeNodo = mensajeNodo.getNext();
+                }
+                System.out.println("Bandeja de entrada: " + "inbox/" + usuario.getCedula() + "BA.txt");
+            } catch (IOException e) {
+                System.out.println("Error al exportar bandeja de entrada: " + e.getMessage());
+            }
+            nodo =nodo.getNext();
+        }
+    }
 
     public void addFirst(Empleado e){this.registro.addFirst(e);}
     public void addLast(Empleado e){this.registro.addLast(e);}
@@ -259,9 +312,7 @@ public class Registro {
 
     public DoubleNode first(){ return this.registro.first();}
 
-    public DoubleNode last(){
-        return this.registro.last();
-    }
+    public DoubleNode last(){return this.registro.last();}
 
 
     public int size(){ return this.registro.size();}
