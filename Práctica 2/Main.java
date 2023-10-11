@@ -189,9 +189,9 @@ public class Main {
             return;
         }
         Empleado para = (Empleado) destinoNodo.getData();
+        scanner.nextLine();
         System.out.print("Ingrese el Titulo del Mensaje: ");
         String titulo = scanner.nextLine();
-        scanner.nextLine();
         System.out.print("Ingrese el Mensaje: ");
         String contenido = scanner.nextLine();
 //        Creamos el mensaje

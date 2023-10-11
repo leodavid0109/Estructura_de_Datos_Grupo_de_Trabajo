@@ -254,11 +254,9 @@ public class Registro {
                 scanner.nextLine();
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine();
-                    String[] parts = line.split(",");
-
-                    Empleado de =  (Empleado) this.buscarNodoCedula(Long.parseLong(parts[0])).getData();
-                    Empleado para =  (Empleado) this.buscarNodoCedula(Long.parseLong(parts[0])).getData();
-                    Message mensaje = new Message(de, para, LocalDateTime.parse( parts[2]), parts[3], parts[4]);
+                    Empleado de =  (Empleado) this.buscarNodoCedula(Long.parseLong(line.substring(0,9).trim())).getData();
+                    Empleado para =  (Empleado) this.buscarNodoCedula(Long.parseLong(line.substring(9,17).trim())).getData();
+                    Message mensaje = new Message(de, para, LocalDateTime.parse(line.substring(17,47).trim()),line.substring(47,87).trim(),line.substring(87).trim());
                     usuario.agregarBandejaEntrada(mensaje);
                 }
                 scanner.close();
@@ -270,7 +268,7 @@ public class Registro {
 
 //    Cargar bandeja de entrada
     public void toFileInbox() {
-        String[] encabezados = {"De", "Para", "titulo", "Contenido", "Fecha", "EMAIL", "DIRECCIÓN"};
+        String[] encabezados = {"De", "Para", "Fecha", "titulo", "Contenido", };
         //          Pasamos usuario por usuario para cargar su bandeja de entrada
         DoubleNode nodo = this.registro.first();
         Empleado usuario;
@@ -278,14 +276,14 @@ public class Registro {
             usuario = (Empleado) nodo.getData();
             try (PrintWriter writer = new PrintWriter(new FileWriter("inbox/" + usuario.getCedula() + "BA.txt"))) {
                 writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-                writer.write(String.format("%-4s %-20s %-8s %-20s %-20s %-15s\n", "#", encabezados[0], encabezados[1], encabezados[2], encabezados[3], encabezados[4], encabezados[5], encabezados[6]));
+                writer.write(String.format("%-8s %-8s %-30s %-40s %-100s\n", encabezados[0], encabezados[1], encabezados[2], encabezados[3], encabezados[4]));
                 writer.print("\n");
                 writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 //              Pasamos mensaje por mensaje y lo guardamos en el archivo
                 DoubleNode mensajeNodo = usuario.getBandejaEntrada().first();
                 while (mensajeNodo != null) {
                     Message mensaje = (Message) mensajeNodo.getData();
-                    writer.write(String.format("%-20s, %-8s, %-20s, %-20s, %-15s\n", mensaje.getDe().getCedula(), mensaje.getPara().getCedula(), mensaje.getTitulo(), mensaje.getContenido(), mensaje.getFecha()));
+                    writer.write(String.format("%-8s %-8s %-30s %-40s %-100s\n", mensaje.getDe().getCedula(), mensaje.getPara().getCedula(), mensaje.getFecha(), mensaje.getTitulo(), mensaje.getContenido() ));
                     mensajeNodo = mensajeNodo.getNext();
                 }
                 System.out.println("Bandeja de entrada: " + "inbox/" + usuario.getCedula() + "BA.txt");
