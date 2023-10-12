@@ -148,10 +148,10 @@ public class Registro {
     public void toFilePassword(String fileName) {
         String[] encabezados = {"CC", "CONTRASEÑA", "PUESTO"};
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-            writer.println("------------------------------------------------");
+            writer.println("--------------------------------------------------");
             writer.write(String.format("%-4s %-8s %-20s %-20s\n", "#", encabezados[0], encabezados[1], encabezados[2]));
             writer.print("\n");
-            writer.println("------------------------------------------------");
+            writer.println("--------------------------------------------------");
             DoubleNode nodo = this.registro.first();
             Empleado usuario = null;
             if (nodo!=null){usuario= (Empleado) nodo.getData();}else{usuario=null;}

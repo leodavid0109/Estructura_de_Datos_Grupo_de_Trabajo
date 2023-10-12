@@ -4,14 +4,19 @@ public class Main {
     public static void main(String[] args) {
 
         Registro registro = new Registro();
-        //Cargar los empleados guardados en el archivo de texto empleados.txt
-        registro.importFileEmpleadosP("empleadosOriginal.txt");
-        registro.importFilePasswordP("passwordOriginal.txt");
 
-        registro.toFileEmpleados("Empleados.txt");
-        registro.toFilePassword("Password.txt");
+        // Transición de archivo enviado para la práctica a tipología de archivos propia
+//        registro.importFileEmpleadosP("empleadosOriginal.txt");
+//        registro.importFilePasswordP("passwordOriginal.txt");
+//
+//        registro.toFileEmpleados("Empleados.txt");
+//        registro.toFilePassword("Password.txt");
 
-//        Importamos todas las bandejas de entradas
+        // Importación de archivos de los empleados y sus respectivos datos de ingreso
+        registro.importFileEmpleadosP("Empleados.txt");
+        registro.importFilePasswordP("Password.txt");
+
+        // Importación de todas las bandejas de entradas
         registro.importBandejaEntrada();
 
         Scanner scanner = new Scanner(System.in);

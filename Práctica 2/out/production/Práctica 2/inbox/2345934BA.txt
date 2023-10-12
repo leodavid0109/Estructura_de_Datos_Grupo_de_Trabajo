@@ -2,3 +2,4 @@
 De       Para     Fecha                          titulo                                   Contenido                                                                                           
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+24567898 2345934  2023-10-10T20:05:08.004219300  Segunda prueba Envio de mensajes         Esta es la segunda prueba para la lectura y escritura de los archivos .txt a la hora de almacenar la bandeja de entrada de los usuario
