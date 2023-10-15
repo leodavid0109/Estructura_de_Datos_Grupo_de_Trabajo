@@ -206,7 +206,45 @@ public class Main {
     }
 
     public static void borradores(Empleado empleado){
+        System.out.println("===== Borradores =====");
+        Stack borradores = empleado.getBorradores();
+        if (borradores.isEmpty()){
+            System.out.println("No tiene borradores por revisar.");
+            return;
+        }
+        Message borrador = (Message) borradores.top();
+        System.out.println("MENSAJE:");
+        System.out.println(borrador);
+        Scanner scanner = new Scanner(System.in);
 
+        boolean validacionLectura = true;
+        while(validacionLectura){
+            System.out.println("¿Qué desea hacer con el correo?" +
+                    "\n1. Enviar correo." +
+                    "\n2. Descartar borrador." +
+                    "\n3. Salir.");
+            int eleccion = Integer.parseInt(scanner.nextLine());
+            if (eleccion > 3 | eleccion < 1){
+                System.out.println("Entrada no válida. Intente de nuevo.");
+                continue;
+            }
+            switch (eleccion){
+                case 1:
+                    borrador.getDestinatario().agregarMensajeBandejaEntrada(borrador);
+                    System.out.println("Mensaje Enviado.");
+                    validacionLectura = false;
+                    break;
+                case 2:
+                    borradores.pop();
+                    System.out.println("Borrador eliminado.");
+                    validacionLectura = false;
+                    break;
+                case 3:
+                    validacionLectura = false;
+                    break;
+            }
+        }
+        // REVISAR SI QUIERO REVISAR OTRO BORRADOR EN EL MISMO LLAMADO DEL MÉTODO
     }
 
     public static void redactarMensaje(Empleado remitente, Registro registro){
