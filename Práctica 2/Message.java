@@ -14,6 +14,7 @@ public class Message {
         this.titulo = titulo;
         this.contenido = contenido;
     }
+
     public Message(Empleado de, Empleado para,LocalDateTime fecha,String titulo, String contenido) {
         this.de = de;
         this.para = para;
@@ -22,6 +23,7 @@ public class Message {
         this.contenido = contenido;
     }
 
+    // Getters y Setters
     public Empleado getDe() {
         return de;
     }

@@ -16,6 +16,8 @@ public class Main {
         registro.importFileEmpleados("Empleados.txt");
         registro.importFilePassword("Password.txt");
 
+//        mostrarListaEmpleados(registro);
+
         // Importación de todas las bandejas de entradas
         registro.importBandejaEntrada();
 
@@ -27,8 +29,6 @@ public class Main {
         System.out.print("Contraseña: ");
         String contrasena = scanner.nextLine();
         System.out.println();
-
-
 
         boolean loggedIn = false;
 
@@ -79,7 +79,8 @@ public class Main {
                 }
                 System.out.println();
             }
-        }else{
+        }
+        else{
             boolean running = true;
             while (running) {
                 System.out.println("Por favor seleccione una opción:");
@@ -226,12 +227,33 @@ public class Main {
     }
 
     private static void mostrarListaEmpleados(Registro registro) {
-        System.out.println("==== Lista de Usuarios ====");
+        System.out.println("==== Lista de Empleados ====");
         if (registro.getRegistro().isEmpty()) {
             System.out.println("No hay usuarios");
-            return;
         }
-        //Main.impresionEmpleados(registro);
+        Main.impresionEmpleados(registro.getRegistro());
+    }
+
+    private static void impresionEmpleados(DoubleList registro){
+        String[] indices_tabla = {"NOMBRE", "CC", "FECHA NACIMIENTO", "CIUDAD NATAL", "TELÉFONO", "EMAIL", "DIRECCIÓN"};
+
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%4s %20s %10s %20s %20s %15s %27s %80s",
+                "#", indices_tabla[0], indices_tabla[1], indices_tabla[2], indices_tabla[3], indices_tabla[4], indices_tabla[5], indices_tabla[6]);
+        System.out.println();
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        DoubleNode nodo = registro.first();
+        int i = 1;
+        while (nodo != null){
+            Empleado empleado = (Empleado) nodo.getData();
+            System.out.printf("%4d %20s %10d %20s %20s %15d %27s %80s",
+                    i, empleado.getNombre(), empleado.getCedula(), empleado.getFecha_nac(), empleado.getCiudad_nac(),
+                    empleado.getTel(), empleado.getEmail(), empleado.getDir());
+            System.out.println();
+            nodo = nodo.getNext();
+            i++;
+        }
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
 }

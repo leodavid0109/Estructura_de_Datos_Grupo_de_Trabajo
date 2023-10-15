@@ -102,7 +102,6 @@ public class Empleado {
 
     public DoubleList getBandejaEntrada(){return bandejaEntrada;}
 
-
     public void setCedula(long cedula) {
         this.cedula = cedula;
     }
