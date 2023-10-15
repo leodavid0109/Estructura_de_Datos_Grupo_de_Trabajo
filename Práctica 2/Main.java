@@ -72,10 +72,9 @@ public class Main {
                     case 2:
                         mensajesLeidos(usuario);
                     case 3:
-//                    inbox.printDrafts();
-                        break;
+                        borradores(usuario);
                     case 4:
-                        enviarMensaje(usuario, registro);
+                        redactarMensaje(usuario, registro);
                     case 5:
                         running = false;
                         registro.toFileInbox();
@@ -107,10 +106,9 @@ public class Main {
                     case 2:
                         mensajesLeidos(usuario);
                     case 3:
-//                    inbox.printDrafts();
-                        break;
+                        borradores(usuario);
                     case 4:
-                        enviarMensaje(usuario, registro);
+                        redactarMensaje(usuario, registro);
                     case 5:
                         // Visualización de la lista de empleados por parte del administrador
                         mostrarListaEmpleados(registro);
@@ -207,8 +205,11 @@ public class Main {
         scanner.close();
     }
 
-//    Envio de mensaje
-    public static void enviarMensaje(Empleado remitente, Registro registro){
+    public static void borradores(Empleado empleado){
+
+    }
+
+    public static void redactarMensaje(Empleado remitente, Registro registro){
         Scanner scanner = new Scanner(System.in);
         System.out.print("Ingrese la cédula del destinatario del correo: ");
         long cedula = scanner.nextLong();
