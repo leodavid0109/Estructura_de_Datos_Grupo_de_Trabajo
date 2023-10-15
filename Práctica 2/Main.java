@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Scanner;
 import Estructuras.*;
 public class Main {
@@ -18,7 +19,7 @@ public class Main {
 
 //        mostrarListaEmpleados(registro);
 
-        // Importación de todas las bandejas de entradas
+        // Importación de todas las bandejas de mensajería
         registro.importBandejaEntrada();
 
         Scanner scanner = new Scanner(System.in);
@@ -52,8 +53,6 @@ public class Main {
                 }
             }
         }
-
-//        Inbox inbox = new Inbox(id);
 
         if (usuario.getPuesto() == Categoria.Empleado){
             boolean running = true;
@@ -99,7 +98,7 @@ public class Main {
                 System.out.println("8. Eliminar usuario");
                 System.out.println("9. Salir");
                 int choice = scanner.nextInt();
-                scanner.nextLine(); // consume newline character
+                scanner.nextLine();
                 switch (choice) {
                     case 1:
                         bandejaEntrada(usuario);
@@ -110,20 +109,20 @@ public class Main {
                     case 4:
                         redactarMensaje(usuario, registro);
                     case 5:
-                        // Visualización de la lista de empleados por parte del administrador
                         mostrarListaEmpleados(registro);
                         break;
                     case 6:
-                        // Registrar nuevo Empleado
+                        registrarNuevoEmpleado(registro);
                     case 7:
                         // Modificar Contraseñas
                     case 8:
                         // Eliminar Usuarios
                     case 9:
                         running = false;
+                        registro.toFileInbox();
                         break;
                     default:
-                        System.out.println("Invalid choice.");
+                        System.out.println("Entrada no válida. Intente de nuevo");
                         break;
                 }
                 System.out.println();
@@ -132,7 +131,6 @@ public class Main {
         scanner.close();
     }
 
-    // Verificación de credenciales
     private static Empleado checkLogin(long cedula, String contrasena, Registro registro) {
         DoubleNode nodo = registro.getRegistro().first();
 //      Recorrido nodo por nodo buscando credencial correcta
@@ -286,6 +284,98 @@ public class Main {
             default:
                 System.out.println("Opción Invalida.");
                 break;
+        }
+    }
+
+    // REVISAR PARA CREACIÓN CON CONTRASEÑA, EN RANDOM Y EN MANUAL
+    public static void registrarNuevoEmpleado(Registro registro){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("==== Agregar un nuevo empleado ====");
+        System.out.println("¿Desea crear un empleado con datos random? (S/N)");
+        char respuesta = scanner.next().charAt(0);
+        if (respuesta == 'S' || respuesta == 's') {
+            System.out.print("Ingrese la cantidad de empleados random que desea crear: ");
+            int cantidadUsuarios = scanner.nextInt();
+            if (cantidadUsuarios <= 0) {
+                System.out.println("Cantidad inválida.");
+                return;
+            }
+            for (int i = 0; i < cantidadUsuarios; i++) {
+                agregarEmpleadosRandom(registro);
+            }
+        } else {
+            System.out.println("==== Agregar un nuevo usuario ====");
+            System.out.print("Ingrese el ID del usuario: ");
+            long nuevoId = scanner.nextLong();
+            scanner.nextLine();
+            if(registro.buscarNodoCedula(nuevoId) != null){
+                System.out.println("Ya existe un usuario con id: " + nuevoId);
+                return;
+            }
+
+            System.out.print("Ingrese el nombre del usuario: ");
+            String nuevoNombre = scanner.nextLine();
+
+            System.out.println("Ingrese la fecha de nacimiento (dd mm aa): ");
+            int nuevoDia = scanner.nextInt();
+            int nuevoMes = scanner.nextInt();
+            int nuevoAnio = scanner.nextInt();
+            Fecha nuevaFecha = new Fecha(nuevoDia, nuevoMes, nuevoAnio);
+
+            scanner.nextLine();
+            System.out.print("Ingrese la ciudad de nacimiento: ");
+            String nuevaCiudadNac = scanner.nextLine();
+
+            System.out.print("Ingrese la dirección (calle, noCalle, nomenclatura, barrio, ciudad): ");
+            String[] direccion = scanner.nextLine().split(", ");
+            String nuevaCalle = direccion[0];
+            int nuevoNoCalle = Integer.parseInt(direccion[1]);
+            String nuevaNomenclatura = direccion[2];
+            String nuevoBarrio = direccion[3];
+            String nuevaCiudad = direccion[4];
+            Direccion nuevaDireccion = new Direccion(nuevaCalle, nuevoNoCalle, nuevaNomenclatura, nuevoBarrio,
+                    nuevaCiudad);
+
+            System.out.print("Ingrese el número de teléfono: ");
+            long nuevoTel = scanner.nextLong();
+
+            scanner.nextLine();
+            System.out.print("Ingrese el correo electrónico: ");
+            String nuevoEmail = scanner.nextLine();
+
+            Empleado nuevoUsuario = new Empleado(nuevoId, nuevoNombre, nuevaFecha, nuevaCiudadNac,
+                    nuevoTel, nuevoEmail, nuevaDireccion);
+            boolean agregado = registro.agregar(nuevoUsuario);
+            if (agregado) {
+                System.out.println("Usuario agregado exitosamente.");
+            } else {
+                System.out.println("No se pudo agregar el usuario.");
+            }
+        }
+    }
+
+    private static void agregarEmpleadosRandom(Registro registro) {
+        // Generar datos aleatorios
+        Random random = new Random();
+        long nuevoId = random.nextInt(1000) + 1; // ID entre 1 y 1000
+        while(registro.buscarNodoCedula(nuevoId) != null){
+            nuevoId=nuevoId+1;
+        }
+        String nuevoNombre = "UsuarioRandom" + nuevoId;
+        Fecha nuevaFecha = new Fecha(random.nextInt(28) + 1, random.nextInt(12) + 1, random.nextInt(21) + 2000);
+        String nuevaCiudadNac = "CiudadRandom" + (random.nextInt(10) + 1); // Ciudad entre 1 y 10
+        Direccion nuevaDireccion = new Direccion("CalleRandom", random.nextInt(500) + 1, "NomenclaturaRandom",
+                "BarrioRandom", "CiudadRandom");
+        long nuevoTel = 3000000000L + random.nextInt(1000000000); // Teléfono aleatorio
+        String nuevoEmail = "usuario" + nuevoId + "@random.com";
+
+        Empleado nuevoUsuario = new Empleado(nuevoId, nuevoNombre, nuevaFecha, nuevaCiudadNac, nuevoTel,
+                nuevoEmail, nuevaDireccion);
+        boolean agregado = registro.agregar(nuevoUsuario);
+        if (agregado) {
+            System.out.println("Usuario agregado exitosamente.");
+        } else {
+            System.out.println("No se pudo agregar el usuario.");
         }
     }
 
