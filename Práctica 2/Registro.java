@@ -283,7 +283,7 @@ public class Registro {
                 DoubleNode mensajeNodo = usuario.getBandejaEntrada().first();
                 while (mensajeNodo != null) {
                     Message mensaje = (Message) mensajeNodo.getData();
-                    writer.write(String.format("%-8s %-8s %-30s %-40s %-100s\n", mensaje.getDe().getCedula(), mensaje.getPara().getCedula(), mensaje.getFecha(), mensaje.getTitulo(), mensaje.getContenido() ));
+                    writer.write(String.format("%-8s %-8s %-30s %-40s %-100s\n", mensaje.getRemitente().getCedula(), mensaje.getDestinatario().getCedula(), mensaje.getFecha(), mensaje.getTitulo(), mensaje.getContenido() ));
                     mensajeNodo = mensajeNodo.getNext();
                 }
                 System.out.println("Bandeja de entrada: " + "inbox/" + usuario.getCedula() + "BA.txt");

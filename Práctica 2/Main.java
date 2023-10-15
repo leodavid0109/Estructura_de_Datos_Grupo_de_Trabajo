@@ -22,25 +22,35 @@ public class Main {
         registro.importBandejaEntrada();
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Bienvenidos a la aplicación de mesajería. Inicie Sesión.");
-        System.out.print("Número de Identificación: ");
-        long cedula = scanner.nextLong();
-        scanner.nextLine();
-        System.out.print("Contraseña: ");
-        String contrasena = scanner.nextLine();
-        System.out.println();
+        System.out.println("==== Aplicación de Mensajería Interna ====");
 
         boolean loggedIn = false;
+        Empleado usuario = null;
 
-        // check login credentials
-        Empleado usuario = checkLogin(cedula, contrasena,registro);
-        if (usuario != null) {
-            loggedIn = true;
-            System.out.println("¡Bienvenido! Has ingresado correctamente.");
-        } else {
-            System.out.println("¡Error! Las credenciales no coinciden, intente nuevamente.");
-            scanner.close();
-            return;
+        while (!loggedIn){
+            System.out.println("INICIO DE SESIÓN");
+            System.out.print("Número de Identificación: ");
+            long cedula = scanner.nextLong();
+            scanner.nextLine();
+            System.out.print("Contraseña: ");
+            String contrasena = scanner.nextLine();
+            System.out.println();
+
+
+            // Verificacion de credenciales (checkLogin)
+            usuario = checkLogin(cedula, contrasena, registro);
+            if (usuario != null) {
+                loggedIn = true;
+                System.out.println("¡Bienvenido!");
+            } else {
+                System.out.println("¡Error! Las credenciales no coinciden.");
+                System.out.println("¿Desea intentar nuevamente? (Y/N)");
+                String validacion = scanner.nextLine();
+                if (!validacion.equals("Y") && !validacion.equals("y")){
+                    scanner.close();
+                    return;
+                }
+            }
         }
 
 //        Inbox inbox = new Inbox(id);
@@ -52,17 +62,15 @@ public class Main {
                 System.out.println("1. Bandeja de Entrada");
                 System.out.println("2. Mensajes leídos");
                 System.out.println("3. Borradores");
-                System.out.println("4. Enviar Mensajes");
+                System.out.println("4. Redactar nuevo mensaje");
                 System.out.println("5. Salir");
                 int choice = scanner.nextInt();
-                scanner.nextLine(); // consume newline character
+                scanner.nextLine();
                 switch (choice) {
                     case 1:
                         bandejaEntrada(usuario);
-                        break;
                     case 2:
-
-                        break;
+                        mensajesLeidos(usuario);
                     case 3:
 //                    inbox.printDrafts();
                         break;
@@ -74,8 +82,7 @@ public class Main {
                         registro.toFileInbox();
                         break;
                     default:
-                        System.out.println("Invalid choice.");
-                        break;
+                        System.out.println("Entrada no válida. Intente de nuevo");
                 }
                 System.out.println();
             }
@@ -87,7 +94,7 @@ public class Main {
                 System.out.println("1. Bandeja de Entrada");
                 System.out.println("2. Mensajes leídos");
                 System.out.println("3. Borradores");
-                System.out.println("4. Enviar Mensajes");
+                System.out.println("4. Redactar nuevo mensaje");
                 System.out.println("5. Ver usuarios");
                 System.out.println("6. Registrar un nuevo usuario");
                 System.out.println("7. Cambiar contraseñas");
@@ -97,8 +104,7 @@ public class Main {
                 scanner.nextLine(); // consume newline character
                 switch (choice) {
                     case 1:
-//                        inbox.readMessage();
-                        break;
+                      bandejaEntrada(usuario);
                     case 2:
                         System.out.print("Enter recipient: ");
                         String recipient = scanner.nextLine();
@@ -163,26 +169,62 @@ public class Main {
         scanner.close();
     }
 
-    private static Empleado checkLogin(long cedula, String contrasena,Registro registro) {
-        // check login credentials in database or file
+    // Verificación de credenciales
+    private static Empleado checkLogin(long cedula, String contrasena, Registro registro) {
         DoubleNode nodo = registro.getRegistro().first();
-        Empleado u = null;
-        if (nodo!=null){u= (Empleado) nodo.getData();}
-//        Recorremos nodo por nodo y luego asignamos a u el objeto almacenado en ese nodo
-        while (nodo!=null) {
-            if (u.getCedula() == cedula && u.getContrasena().equals(contrasena)) {
-                return u;
+//      Recorrido nodo por nodo buscando credencial correcta
+        while (nodo != null) {
+            Empleado empleado = (Empleado) nodo.getData();
+            if (empleado.getCedula() == cedula && empleado.getContrasena().equals(contrasena)) {
+                return empleado;
             }
             nodo = nodo.getNext();
-            if (nodo!=null){u= (Empleado) nodo.getData();}else{u=null;}
         }
         return null;
     }
 
-    public static void bandejaEntrada(Empleado usuario){
-        System.out.println("-----|Bandeja de Entrada|-----");
-        System.out.println("Por favor seleccione el mensaje que desee leer:");
-        usuario.mostrarBandejaEntrada();
+    public static void bandejaEntrada(Empleado empleado){
+        System.out.println("===== Bandeja de Entrada =====");
+        Scanner scanner = new Scanner(System.in);
+        empleado.mostrarBandejaEntrada();
+        boolean validacionLectura = true;
+        while(validacionLectura){
+            System.out.println("¿Desea seleccionar un correo a leer? (Y/N)");
+            String validacion = scanner.nextLine();
+            if (validacion.equals("Y") | validacion.equals("y")){
+                validacionLectura = false;
+            } else if (validacion.equals("N") | validacion.equals("n")) {
+                return;
+            }
+            else{
+                System.out.println("Entrada no válida, intente de nuevo.");
+            }
+        }
+        System.out.println("Escoja por favor el correo que desea ver: ");
+        int correo = scanner.nextInt();
+        DoubleNode nodo = empleado.buscarNodoBandejaEntrada(correo);
+        Message correoLeido = (Message) empleado.getBandejaEntrada().remove(nodo);
+        System.out.println(correoLeido);
+        empleado.getCorreosLeidos().enqueue(correoLeido);
+        scanner.close();
+    }
+
+    public static void mensajesLeidos(Empleado empleado){
+        System.out.println("===== Mensajes Leídos =====");
+        Scanner scanner = new Scanner(System.in);
+        boolean validacionLectura = true;
+        while(validacionLectura){
+            System.out.println("¿Desea ver su (Y/N)");
+            String validacion = scanner.nextLine();
+            if (validacion.equals("Y") | validacion.equals("y")){
+                validacionLectura = false;
+            } else if (validacion.equals("N") | validacion.equals("n")) {
+                return;
+            }
+            else{
+                System.out.println("Entrada no válida, intente de nuevo.");
+            }
+        }
     }
 
 //    Envio de mensaje

@@ -1,35 +1,35 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 public class Message {
-    private Empleado de;
-    private Empleado para;
+    private Empleado remitente;
+    private Empleado destinatario;
     private LocalDateTime fecha;
     private String titulo;
     private String contenido;
 
-    public Message(Empleado de, Empleado para,String titulo, String contenido) {
-        this.de = de;
-        this.para = para;
+    public Message(Empleado remitente, Empleado destinatario, String titulo, String contenido) {
+        this.remitente = remitente;
+        this.destinatario = destinatario;
         this.fecha = LocalDateTime.now();
         this.titulo = titulo;
         this.contenido = contenido;
     }
 
-    public Message(Empleado de, Empleado para,LocalDateTime fecha,String titulo, String contenido) {
-        this.de = de;
-        this.para = para;
+    public Message(Empleado remitente, Empleado destinatario,LocalDateTime fecha,String titulo, String contenido) {
+        this.remitente = remitente;
+        this.destinatario = destinatario;
         this.fecha = fecha;
         this.titulo = titulo;
         this.contenido = contenido;
     }
 
     // Getters y Setters
-    public Empleado getDe() {
-        return de;
+    public Empleado getDestinatario() {
+        return destinatario;
     }
 
-    public Empleado getPara() {
-        return para;
+    public Empleado getRemitente() {
+        return remitente;
     }
 
     public LocalDateTime getFecha() {
@@ -44,8 +44,9 @@ public class Message {
         return contenido;
     }
 
+
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        return de.getCedula() + "," + para.getCedula() + "," + fecha.format(formatter) + "," + titulo + "," + contenido;
+        return remitente.getCedula() + "," + destinatario.getCedula() + "," + fecha.format(formatter) + "," + titulo + "," + contenido;
     }
 }

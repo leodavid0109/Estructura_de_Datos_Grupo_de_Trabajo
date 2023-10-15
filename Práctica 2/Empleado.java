@@ -1,5 +1,6 @@
 import Estructuras.DoubleList;
 import Estructuras.DoubleNode;
+import Estructuras.Queue;
 
 public class Empleado {
     private long cedula;
@@ -12,6 +13,7 @@ public class Empleado {
     private String contrasena;
     private Categoria puesto;
     private DoubleList bandejaEntrada;
+    private Queue correosLeidos;
 
     public Empleado(long cedula, String nombre, Fecha fecha_nac, String ciudad_nac, long tel, String email, Direccion dir) {
         this.cedula = cedula;
@@ -23,7 +25,8 @@ public class Empleado {
         this.dir = dir;
         this.contrasena = null;
         this.puesto = null;
-        this.bandejaEntrada =  new DoubleList();
+        this.bandejaEntrada = new DoubleList();
+        this.correosLeidos = new Queue();
     }
 
     public Empleado(long cedula, String nombre, Fecha fecha_nac, String ciudad_nac, long tel, String email, Direccion dir, String contrasena, Categoria puesto) {
@@ -37,7 +40,7 @@ public class Empleado {
         this.contrasena = contrasena;
         this.puesto = puesto;
         this.bandejaEntrada =  new DoubleList();
-
+        this.correosLeidos = new Queue();
     }
 
     public void agregarBandejaEntrada(Message mensaje){
@@ -45,15 +48,37 @@ public class Empleado {
     }
 
     public void mostrarBandejaEntrada() {
-        DoubleNode nodo = this.bandejaEntrada.first();
-        if (nodo==null){
-            System.out.println("Su bandeja de entrada esta vacia");
+        DoubleNode nodo = bandejaEntrada.first();
+        if (nodo == null){
+            System.out.println("Su bandeja de entrada esta vacía");
+            return;
         }
-        System.out.println("#  De    Para   Titulo         Contenido");
-        while (nodo!=null){
-            System.out.println("1- "+nodo.getData());
+
+        String[] indices_tabla = {"FECHA", "TITULO", "REMITENTE"};
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%4s %20s %30s %20s",
+                "#", indices_tabla[0], indices_tabla[1], indices_tabla[2]);
+        System.out.println();
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        int i = 1;
+        while (nodo != null){
+            Message correo = (Message) nodo.getData();
+            System.out.printf("%4d %20s %30s %20s",
+                    i, correo.getFecha(), correo.getTitulo(), correo.getRemitente());
+            System.out.println();
+            nodo = nodo.getNext();
+            i++;
+        }
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
+    public DoubleNode buscarNodoBandejaEntrada(int posicion){
+        DoubleNode nodo = bandejaEntrada.first();
+        int i = 1;
+        while (i < posicion){
             nodo = nodo.getNext();
         }
+        return nodo;
     }
 
     // ToString
@@ -102,6 +127,10 @@ public class Empleado {
 
     public DoubleList getBandejaEntrada(){return bandejaEntrada;}
 
+    public Queue getCorreosLeidos() {
+        return correosLeidos;
+    }
+
     public void setCedula(long cedula) {
         this.cedula = cedula;
     }
@@ -142,4 +171,7 @@ public class Empleado {
         this.bandejaEntrada = bandejaEntrada;
     }
 
+    public void setCorreosLeidos(Queue correosLeidos) {
+        this.correosLeidos = correosLeidos;
+    }
 }
