@@ -1,6 +1,7 @@
 import Estructuras.DoubleList;
 import Estructuras.DoubleNode;
 import Estructuras.Queue;
+import Estructuras.Stack;
 
 public class Empleado {
     private long cedula;
@@ -14,6 +15,7 @@ public class Empleado {
     private Categoria puesto;
     private DoubleList bandejaEntrada;
     private Queue correosLeidos;
+    private Stack borradores;
 
     public Empleado(long cedula, String nombre, Fecha fecha_nac, String ciudad_nac, long tel, String email, Direccion dir) {
         this.cedula = cedula;
@@ -27,6 +29,7 @@ public class Empleado {
         this.puesto = null;
         this.bandejaEntrada = new DoubleList();
         this.correosLeidos = new Queue();
+        this.borradores = new Stack();
     }
 
     public Empleado(long cedula, String nombre, Fecha fecha_nac, String ciudad_nac, long tel, String email, Direccion dir, String contrasena, Categoria puesto) {
@@ -41,10 +44,15 @@ public class Empleado {
         this.puesto = puesto;
         this.bandejaEntrada =  new DoubleList();
         this.correosLeidos = new Queue();
+        this.borradores = new Stack();
     }
 
-    public void agregarBandejaEntrada(Message mensaje){
-        this.bandejaEntrada.addFirst(mensaje);
+    public void agregarMensajeBandejaEntrada(Message mensaje){
+        bandejaEntrada.addFirst(mensaje);
+    }
+
+    public void agregarMensajeBorradores(Message mensaje){
+        borradores.push(mensaje);
     }
 
     public void mostrarBandejaEntrada() {
@@ -131,6 +139,10 @@ public class Empleado {
         return correosLeidos;
     }
 
+    public Stack getBorradores() {
+        return borradores;
+    }
+
     public void setCedula(long cedula) {
         this.cedula = cedula;
     }
@@ -173,5 +185,9 @@ public class Empleado {
 
     public void setCorreosLeidos(Queue correosLeidos) {
         this.correosLeidos = correosLeidos;
+    }
+
+    public void setBorradores(Stack borradores) {
+        this.borradores = borradores;
     }
 }

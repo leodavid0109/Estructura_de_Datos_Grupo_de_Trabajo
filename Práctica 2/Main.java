@@ -75,8 +75,7 @@ public class Main {
 //                    inbox.printDrafts();
                         break;
                     case 4:
-                        enviarMensaje(usuario,registro);
-                        break;
+                        enviarMensaje(usuario, registro);
                     case 5:
                         running = false;
                         registro.toFileInbox();
@@ -104,48 +103,14 @@ public class Main {
                 scanner.nextLine(); // consume newline character
                 switch (choice) {
                     case 1:
-                      bandejaEntrada(usuario);
+                        bandejaEntrada(usuario);
                     case 2:
-                        System.out.print("Enter recipient: ");
-                        String recipient = scanner.nextLine();
-//                        if (!userExists(recipient)) {
-//                            System.out.println("Recipient does not exist.");
-//                            break;
-//                        }
-                        System.out.print("Enter title: ");
-                        String title = scanner.nextLine();
-                        System.out.print("Enter message content: ");
-                        String content = scanner.nextLine();
-//                        Message message = new Message(id, recipient, title, content);
-                        System.out.println("1. Save as draft");
-                        System.out.println("2. Discard");
-                        System.out.println("3. Send");
-                        int option = scanner.nextInt();
-                        scanner.nextLine(); // consume newline character
-                        switch (option) {
-                            case 1:
-//                            inbox.addDraft(title, content);
-                                System.out.println("Message saved as draft.");
-                                break;
-                            case 2:
-                                System.out.println("Message discarded.");
-                                break;
-                            case 3:
-//                                inbox.addMessage(message);
-                                System.out.println("Message sent.");
-                                break;
-                            default:
-                                System.out.println("Invalid option.");
-                                break;
-                        }
-                        break;
+                        mensajesLeidos(usuario);
                     case 3:
 //                    inbox.printDrafts();
                         break;
                     case 4:
-//                    inbox.discardDraft();
-                        System.out.println("Draft discarded.");
-                        break;
+                        enviarMensaje(usuario, registro);
                     case 5:
                         // Visualización de la lista de empleados por parte del administrador
                         mostrarListaEmpleados(registro);
@@ -211,52 +176,69 @@ public class Main {
 
     public static void mensajesLeidos(Empleado empleado){
         System.out.println("===== Mensajes Leídos =====");
-        Scanner scanner = new Scanner(System.in);
-        boolean validacionLectura = true;
-        while(validacionLectura){
-            System.out.println("¿Desea ver su (Y/N)");
-            String validacion = scanner.nextLine();
-            if (validacion.equals("Y") | validacion.equals("y")){
-                validacionLectura = false;
-            } else if (validacion.equals("N") | validacion.equals("n")) {
-                return;
-            }
-            else{
-                System.out.println("Entrada no válida, intente de nuevo.");
-            }
+        Queue mensajes = empleado.getCorreosLeidos();
+        if (mensajes.isEmpty()){
+            System.out.println("No tiene más correos leídos por ver.");
+            return;
         }
+        Message leido = (Message) mensajes.dequeue();
+        System.out.println("MENSAJE:");
+        System.out.println(leido);
+        Scanner scanner = new Scanner(System.in);
+        while(!mensajes.isEmpty()){
+            boolean validacionLectura = true;
+            while(validacionLectura){
+                System.out.println("¿Desea ver el siguiente correo leído? (Y/N)");
+                String validacion = scanner.nextLine();
+                if (validacion.equals("Y") | validacion.equals("y")){
+                    validacionLectura = false;
+                } else if (validacion.equals("N") | validacion.equals("n")) {
+                    scanner.close();
+                    return;
+                }
+                else{
+                    System.out.println("Entrada no válida, intente de nuevo.");
+                }
+            }
+            leido = (Message) mensajes.dequeue();
+            System.out.println("MENSAJE:");
+            System.out.println(leido);
+        }
+        scanner.close();
     }
 
 //    Envio de mensaje
-    public static void enviarMensaje(Empleado de,Registro registro){
+    public static void enviarMensaje(Empleado remitente, Registro registro){
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese la cedula de la persona con la que desea contactar: ");
+        System.out.print("Ingrese la cédula del destinatario del correo: ");
         long cedula = scanner.nextLong();
         DoubleNode destinoNodo = registro.buscarNodoCedula(cedula);
-        if (destinoNodo==null) {
-            System.out.println("¡Error!No existe un usuario con la cedula: "+cedula);
+        if (destinoNodo == null) {
+            System.out.println("No existe un empleado con la cédula: " + cedula);
             return;
         }
-        Empleado para = (Empleado) destinoNodo.getData();
+        Empleado destinatario = (Empleado) destinoNodo.getData();
         scanner.nextLine();
-        System.out.print("Ingrese el Titulo del Mensaje: ");
+        System.out.print("Asunto: ");
         String titulo = scanner.nextLine();
-        System.out.print("Ingrese el Mensaje: ");
+        System.out.print("Mensaje: ");
         String contenido = scanner.nextLine();
-//        Creamos el mensaje
-        Message mensaje = new Message(de, para, titulo, contenido);
-        System.out.println("Seleccione una opción:");
+        // Creamos el mensaje
+        Message mensaje = new Message(remitente, destinatario, titulo, contenido);
+
+        System.out.println("¿Qué desea hacer con el mensaje?");
         System.out.println("1. Enviar");
         System.out.println("2. Guardar como Borrador");
         System.out.println("3. Descartar");
         int option = scanner.nextInt();
-        scanner.nextLine(); // consume newline character
+        scanner.nextLine();
         switch (option) {
             case 1:
-                para.agregarBandejaEntrada(mensaje);
+                destinatario.agregarMensajeBandejaEntrada(mensaje);
                 System.out.println("Mensaje Enviado.");
                 break;
             case 2:
+                remitente.agregarMensajeBorradores(mensaje);
                 System.out.println("Mensaje Guardado como Borrador.");
                 break;
             case 3:

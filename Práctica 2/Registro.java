@@ -257,7 +257,7 @@ public class Registro {
                     Empleado de =  (Empleado) this.buscarNodoCedula(Long.parseLong(line.substring(0,9).trim())).getData();
                     Empleado para =  (Empleado) this.buscarNodoCedula(Long.parseLong(line.substring(9,17).trim())).getData();
                     Message mensaje = new Message(de, para, LocalDateTime.parse(line.substring(17,47).trim()),line.substring(47,87).trim(),line.substring(87).trim());
-                    usuario.agregarBandejaEntrada(mensaje);
+                    usuario.agregarMensajeBandejaEntrada(mensaje);
                 }
                 scanner.close();
             } catch (IOException e) {
