@@ -1,9 +1,9 @@
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#    NOMBRE               CC       FECHA NACIMIENTO     CIUDAD NATAL         TELÉFONO        EMAIL                       DIRECCIÓN                                                                       
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#    NOMBRE               CC         FECHA NACIMIENTO     CIUDAD NATAL         TELÉFONO        EMAIL                       DIRECCIÓN                                                                       
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-1    Tatiana-Ramirez      2345934  15/11/1982           Medellin             3004567890      tatianaramirez@edl.edu.co   Calle cll, No. 5, 4S-69, Poblado, Medellin                                      
-2    Pedro-Gomez          1075689  20/2/1990            Popayan              3003012323      pedrogomez@edl.edu.co       Calle kr, No. 23, 8-10, SanJuan, Envigado                                       
-3    Camila-Jimenez       2345902  15/9/1985            Cali                 3003234567      camilajimenez@edl.edu.co    Calle tr, No. 45, 4S-73, Poblado, Medellin                                      
-4    Diego-Palacio        34568910 20/12/1979           Envigado             3013234567      diegopalacio@edl.edu.co     Calle cll, No. 65, 3-29, Robledo, Medellin                                      
-5    Juan-Perez           24567898 12/10/1980           Medellin             3003233234      juanperez@edl.edu.co        Calle kr, No. 74, 4T-35, Boston, Medellin                                       
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1    Juan-Perez           24567898   12/10/1980           Medellin             3003233234      juanperez@edl.edu.co        Calle kr, No. 74, 4T-35, Boston, Medellin, null, Apto: null                     
+2    Diego-Palacio        34568910   20/12/1979           Envigado             3013234567      diegopalacio@edl.edu.co     Calle cll, No. 65, 3-29, Robledo, Medellin, Balcones-de-la-Quinta, Apto: 405    
+3    Camila-Jimenez       2345902    15/9/1985            Cali                 3003234567      camilajimenez@edl.edu.co    Calle tr, No. 45, 4S-73, Poblado, Medellin, null, Apto: null                    
+4    Pedro-Gomez          1075689    20/2/1990            Popayan              3003012323      pedrogomez@edl.edu.co       Calle kr, No. 23, 8-10, SanJuan, Envigado, Mirador, Apto: 503                   
+5    Tatiana-Ramirez      2345934    15/11/1982           Medellin             3004567890      tatianaramirez@edl.edu.co   Calle cll, No. 5, 4S-69, Poblado, Medellin, UrbColina, Apto: 1023               

@@ -8,48 +8,43 @@ import java.util.*;
 public class Registro {
     private DoubleList registro;
 
-
     public Registro() {
         this.registro = new DoubleList();
     }
 
-    public boolean agregar(Empleado usuario) {
-        DoubleNode nodo = this.first();
-        Empleado u = null;
-        if (nodo!=null){u= (Empleado) nodo.getData();}else{u=null;}
-//        Recorremos nodo por nodo y luego asignamos a u el objeto almacenado en ese nodo
-        while (nodo!=null) {
-            if (u.getCedula() == usuario.getCedula()) {
+    public boolean agregar(Empleado empleado) {
+        DoubleNode nodo = registro.first();
+        while (nodo != null){
+            Empleado empleado_aux = (Empleado) nodo.getData();
+            if (empleado_aux.getCedula() == empleado.getCedula()){
                 System.out.println("Ya existe un usuario con el mismo número de identificación.");
                 return false;
             }
             nodo = nodo.getNext();
-            if (nodo!=null){u= (Empleado) nodo.getData();}else{u=null;}
         }
-        this.addFirst(usuario);
+        registro.addLast(empleado);
         return true;
     }
 
     public void eliminar(long cedula) {
         DoubleNode nodo = buscarNodoCedula(cedula);
-        if(nodo!=null){
-            this.registro.remove(nodo);
-            System.out.println("Se elimino el usuario con docuemnto"+ cedula + "correctamente");
-        }else{
+        if(nodo != null){
+            registro.remove(nodo);
+            System.out.println("Empleado con CC " + cedula + " eliminado.");
+        }
+        else{
             System.out.println("No se encuentra un usuario con este número de documento");
         }
     }
 
     public DoubleNode buscarNodoCedula(long cedula){
-        DoubleNode nodo = this.first();
-        Empleado usuario = (Empleado) nodo.getData();
-        while (nodo!=null){
-            if (usuario.getCedula() == cedula) {
+        DoubleNode nodo = registro.first();
+        while (nodo != null){
+            Empleado empleado = (Empleado) nodo.getData();
+            if (empleado.getCedula() == cedula) {
                 return nodo;
             }
-            nodo.getNext();
             nodo = nodo.getNext();
-            usuario = (Empleado) nodo.getData();
         }
         return null;
     }
@@ -57,19 +52,17 @@ public class Registro {
     public void toFileEmpleados(String fileName) {
         String[] encabezados = {"NOMBRE", "CC", "FECHA NACIMIENTO", "CIUDAD NATAL", "TELÉFONO", "EMAIL", "DIRECCIÓN"};
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-            writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-            writer.write(String.format("%-4s %-20s %-8s %-20s %-20s %-15s %-27s %-80s\n", "#", encabezados[0], encabezados[1], encabezados[2], encabezados[3], encabezados[4], encabezados[5], encabezados[6]));
+            writer.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            writer.write(String.format("%-4s %-20s %-10s %-20s %-20s %-15s %-27s %-80s\n", "#", encabezados[0], encabezados[1], encabezados[2], encabezados[3], encabezados[4], encabezados[5], encabezados[6]));
             writer.print("\n");
-            writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-            DoubleNode nodo = this.registro.first();
-            Empleado usuario = null;
-            if (nodo!=null){usuario= (Empleado) nodo.getData();}
+            writer.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            DoubleNode nodo = registro.first();
             int i =1;
-            while (usuario !=null) {
-                writer.write(String.format("%-4d %-20s %-8d %-20s %-20s %-15d %-27s %-80s\n", i, usuario.getNombre(), usuario.getCedula(), usuario.getFecha_nac(), usuario.getCiudad_nac(),
-                    usuario.getTel(), usuario.getEmail(), usuario.getDir()));
+            while (nodo != null) {
+                Empleado empleado = (Empleado) nodo.getData();
+                writer.write(String.format("%-4d %-20s %-10d %-20s %-20s %-15d %-27s %-80s\n", i, empleado.getNombre(), empleado.getCedula(), empleado.getFecha_nac(), empleado.getCiudad_nac(),
+                    empleado.getTel(), empleado.getEmail(), empleado.getDir()));
                 nodo = nodo.getNext();
-                if (nodo!=null){usuario= (Empleado) nodo.getData();}else{usuario=null;}
                 i++;
             }
             System.out.println("Datos guardados en el archivo: " + fileName);
@@ -78,41 +71,51 @@ public class Registro {
         }
     }
 
-//    public void importFileEmpleados(String fileName) {
-//        try (Scanner scanner = new Scanner(new File(fileName))) {
-//            //Descartamos las tres primeras líneas del archivo
-//            //Estas líneas corresponden a los encabezados, y a las dos líneas de separación para generación de formato como tabla.
-//            scanner.nextLine();
-//            scanner.nextLine();
-//            scanner.nextLine();
-//            scanner.nextLine();
-//            while (scanner.hasNextLine()) {
-//                String registro = scanner.nextLine();
-//                String nombre = registro.substring(4, 25).trim();
-//                long id = Long.parseLong(registro.substring(25, 33).trim());
-//                String[] fechaData = registro.substring(33, 53).trim().split("/");
-//                int dd = Integer.parseInt(fechaData[0]);
-//                int mm = Integer.parseInt(fechaData[1]);
-//                int aa = Integer.parseInt(fechaData[2]);
-//                Fecha fecha = new Fecha(dd, mm, aa);
-//                String ciudadNac = registro.substring(53, 73).trim();
-//                long tel = Long.parseLong(registro.substring(73, 88).trim());
-//                String email = registro.substring(88, 115).trim();
-//                String[] direccion = registro.substring(115).trim().split(", ");
-//                String calle = direccion[0].substring(6).trim();
-//                int noCalle = Integer.parseInt(direccion[1].substring(4).trim());
-//                String nomenclatura = direccion[2];
-//                String barrio = direccion[3];
-//                String ciudad = direccion[4];
-//                Direccion direccion_final = new Direccion(calle, noCalle, nomenclatura, barrio, ciudad);
-//                Empleado empleado = new Empleado(id, nombre, fecha, ciudadNac, tel, email, direccion_final);
-//                agregar(empleado);
-//            }
-//            System.out.println("Datos importados desde el archivo: " + fileName);
-//        } catch (FileNotFoundException e) {
-//            System.out.println("Archivo no encontrado: " + e.getMessage());
-//        }
-//    }
+    // Método de lectura de archivo para importación de Empleados
+    public void importFileEmpleados(String fileName) {
+        try (Scanner scanner = new Scanner(new File(fileName))) {
+            // Descartamos las tres primeras líneas del archivo
+            // Estas líneas corresponden a los encabezados, y a las dos líneas de separación para generación de formato como tabla.
+            scanner.nextLine();
+            scanner.nextLine();
+            scanner.nextLine();
+            scanner.nextLine();
+            while (scanner.hasNextLine()) {
+                String registro = scanner.nextLine();
+                String nombre = registro.substring(5, 25).trim();
+                long id = Long.parseLong(registro.substring(25, 35).trim());
+                String[] fechaData = registro.substring(35, 55).trim().split("/");
+                int dd = Integer.parseInt(fechaData[0]);
+                int mm = Integer.parseInt(fechaData[1]);
+                int aa = Integer.parseInt(fechaData[2]);
+                Fecha fecha = new Fecha(dd, mm, aa);
+                String ciudadNac = registro.substring(55, 75).trim();
+                long tel = Long.parseLong(registro.substring(75, 91).trim());
+                String email = registro.substring(91, 118).trim();
+                String[] direccion = registro.substring(118).trim().split(", ");
+                String calle = direccion[0].substring(6).trim();
+                int noCalle = Integer.parseInt(direccion[1].substring(4).trim());
+                String nomenclatura = direccion[2];
+                String barrio = direccion[3];
+                String ciudad = direccion[4];
+                Direccion direccion_final;
+                if (direccion[5].equals("null")){
+                    direccion_final = new Direccion(calle, noCalle, nomenclatura, barrio, ciudad);
+                }
+                else {
+                    String urbanizacion = direccion[5];
+                    String apartamento = direccion[6].split(": ")[1];
+                    direccion_final = new Direccion(calle, noCalle, nomenclatura, barrio, ciudad, urbanizacion, apartamento);
+                }
+
+                Empleado empleado = new Empleado(id, nombre, fecha, ciudadNac, tel, email, direccion_final);
+                agregar(empleado);
+            }
+            System.out.println("Datos importados desde el archivo: " + fileName);
+        } catch (FileNotFoundException e) {
+            System.out.println("Archivo no encontrado: " + e.getMessage());
+        }
+    }
 
     // Método de lectura de archivo con el estilo de impresión enviado en la Práctica
     // Su uso inicial es el de permitir la transición de este estilo de archivo al nuevo donde las tablas son implementadas.
@@ -135,7 +138,16 @@ public class Registro {
                 String nomenclatura = registro[9];
                 String barrio = registro[10];
                 String ciudad = registro[11];
-                Direccion direccion_final = new Direccion(calle, noCalle, nomenclatura, barrio, ciudad);
+                Direccion direccion_final;
+                if (registro[12] == "null"){
+                    direccion_final = new Direccion(calle, noCalle, nomenclatura, barrio, ciudad);
+                }
+                else{
+                    String urbanizacion = registro[12];
+                    String apartamento = registro[13];
+                    direccion_final = new Direccion(calle, noCalle, nomenclatura, barrio, ciudad, urbanizacion, apartamento);
+                }
+
                 Empleado empleado = new Empleado(id, nombre, fecha, ciudadNac, tel, email, direccion_final);
                 this.agregar(empleado);
             }
@@ -148,18 +160,16 @@ public class Registro {
     public void toFilePassword(String fileName) {
         String[] encabezados = {"CC", "CONTRASEÑA", "PUESTO"};
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-            writer.println("--------------------------------------------------");
-            writer.write(String.format("%-4s %-8s %-20s %-20s\n", "#", encabezados[0], encabezados[1], encabezados[2]));
+            writer.println("----------------------------------------------------");
+            writer.write(String.format("%-4s %-10s %-20s %-20s\n", "#", encabezados[0], encabezados[1], encabezados[2]));
             writer.print("\n");
-            writer.println("--------------------------------------------------");
-            DoubleNode nodo = this.registro.first();
-            Empleado usuario = null;
-            if (nodo!=null){usuario= (Empleado) nodo.getData();}else{usuario=null;}
+            writer.println("----------------------------------------------------");
+            DoubleNode nodo = registro.first();
             int i =1;
-            while (usuario !=null) {
-                writer.write(String.format("%-4d %-8d %-20s %-20s\n", i, usuario.getCedula(), usuario.getContrasena(), usuario.getPuesto()));
+            while (nodo !=null) {
+                Empleado empleado = (Empleado) nodo.getData();
+                writer.write(String.format("%-4d %-10d %-20s %-20s\n", i, empleado.getCedula(), empleado.getContrasena(), empleado.getPuesto()));
                 nodo = nodo.getNext();
-                if (nodo!=null){usuario= (Empleado) nodo.getData();}else{usuario = null;}
                 i++;
             }
             System.out.println("Datos guardados en el archivo: " + fileName);
@@ -168,6 +178,7 @@ public class Registro {
         }
     }
 
+    // Método de lectura de archivo para importación de método de ingreso de Empleados (contraseñas)
     public void importFilePassword(String fileName) {
         try (Scanner scanner = new Scanner(new File(fileName))) {
             //Descartamos las tres primeras líneas del archivo
@@ -182,22 +193,17 @@ public class Registro {
                 String contrasena = linea.substring(13, 33).trim();
                 String categoria = linea.substring(33, 53).trim();
 
-                DoubleNode nodo = this.registro.first();
-                Empleado usuario = (Empleado) nodo.getData();
-                while (usuario !=null) {
-                    if(id == usuario.getCedula()){
-                        usuario.setContrasena(contrasena);
-                        switch (categoria){
-                            case "Empleado":
-                                usuario.setPuesto(Categoria.Empleado);
-                                break;
-                            case "Administrador":
-                                usuario.setPuesto(Categoria.Administrador);
-                                break;
+                DoubleNode nodo = registro.first();
+                while (nodo !=null) {
+                    Empleado empleado = (Empleado) nodo.getData();
+                    if(id == empleado.getCedula()){
+                        empleado.setContrasena(contrasena);
+                        switch (categoria) {
+                            case "Empleado" -> empleado.setPuesto(Categoria.Empleado);
+                            case "Administrador" -> empleado.setPuesto(Categoria.Administrador);
                         }
                     }
                     nodo = nodo.getNext();
-                    usuario = (Empleado) nodo.getData();
                 }
             }
             System.out.println("Datos importados desde el archivo: " + fileName);
@@ -216,23 +222,17 @@ public class Registro {
                 String contrasena = linea[1];
                 String categoria = linea[2];
 
-                DoubleNode nodo = this.registro.first();
-                Empleado usuario = null;
-                if (nodo!=null){usuario= (Empleado) nodo.getData();}
-                while (usuario !=null) {
-                    if(id == usuario.getCedula()){
-                        usuario.setContrasena(contrasena);
-                        switch (categoria){
-                            case "empleado":
-                                usuario.setPuesto(Categoria.Empleado);
-                                break;
-                            case "administrador":
-                                usuario.setPuesto(Categoria.Administrador);
-                                break;
+                DoubleNode nodo = registro.first();
+                while (nodo !=null) {
+                    Empleado empleado = (Empleado) nodo.getData();
+                    if(id == empleado.getCedula()){
+                        empleado.setContrasena(contrasena);
+                        switch (categoria) {
+                            case "empleado" -> empleado.setPuesto(Categoria.Empleado);
+                            case "administrador" -> empleado.setPuesto(Categoria.Administrador);
                         }
                     }
                     nodo = nodo.getNext();
-                    if (nodo!=null){usuario= (Empleado) nodo.getData();}else{usuario=null;}
                 }
             }
             System.out.println("Datos importados desde el archivo: " + fileName);
@@ -241,9 +241,9 @@ public class Registro {
         }
     }
 
-    //    Metodos para la bandeja de entrada
+    // Métodos para la bandeja de entrada
     public void importBandejaEntrada(){
-        DoubleNode nodo = this.first();
+        DoubleNode nodo = registro.first();
         while (nodo!=null){
             Empleado usuario = (Empleado) nodo.getData();
             try {
@@ -294,25 +294,7 @@ public class Registro {
         }
     }
 
-    public void addFirst(Empleado e){this.registro.addFirst(e);}
-    public void addLast(Empleado e){this.registro.addLast(e);}
-    public void removeFirst(){ this.registro.removeFirst();}
-
-    public void removeLast(){ this.registro.removeLast();}
-
-    public void remove(DoubleNode n){ this.registro.remove(n);}
-
-    public void addAfter(DoubleNode n,Empleado e){ this.registro.addAfter(n,e);}
-
-
-
-    public Boolean isEmpty(){ return this.registro.isEmpty();}
-
-    public DoubleNode first(){ return this.registro.first();}
-
-    public DoubleNode last(){return this.registro.last();}
-
-
-    public int size(){ return this.registro.size();}
-
+    public DoubleList getRegistro() {
+        return registro;
+    }
 }

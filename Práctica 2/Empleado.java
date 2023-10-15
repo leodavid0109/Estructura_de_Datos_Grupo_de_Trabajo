@@ -21,9 +21,9 @@ public class Empleado {
         this.tel = tel;
         this.email = email;
         this.dir = dir;
-        this.bandejaEntrada =  new DoubleList();
         this.contrasena = null;
         this.puesto = null;
+        this.bandejaEntrada =  new DoubleList();
     }
 
     public Empleado(long cedula, String nombre, Fecha fecha_nac, String ciudad_nac, long tel, String email, Direccion dir, String contrasena, Categoria puesto) {
@@ -40,7 +40,9 @@ public class Empleado {
 
     }
 
-
+    public void agregarBandejaEntrada(Message mensaje){
+        this.bandejaEntrada.addFirst(mensaje);
+    }
 
     public void mostrarBandejaEntrada() {
         DoubleNode nodo = this.bandejaEntrada.first();
@@ -57,7 +59,7 @@ public class Empleado {
     // ToString
     @Override
     public String toString() {
-        return "CC: " + cedula + "\nNombre: " + nombre + "\nFecha de nacimiento: " + fecha_nac + "\nCiudad de nacimiento: "
+        return "Nombre: " + nombre + "\nCC: " + cedula +  "\nFecha de nacimiento: " + fecha_nac + "\nCiudad de nacimiento: "
                 + ciudad_nac + "\nTeléfono: " + tel + "\nEmail: " + email + "\nDirección: " + dir;
     }
 
@@ -97,12 +99,8 @@ public class Empleado {
     public Categoria getPuesto() {
         return puesto;
     }
+
     public DoubleList getBandejaEntrada(){return bandejaEntrada;}
-
-    public void agregarBandejaEntrada(Message mensaje){
-        this.bandejaEntrada.addFirst(mensaje);
-    }
-
 
 
     public void setCedula(long cedula) {
@@ -140,4 +138,9 @@ public class Empleado {
     public void setPuesto(Categoria puesto) {
         this.puesto = puesto;
     }
+
+    public void setBandejaEntrada(DoubleList bandejaEntrada) {
+        this.bandejaEntrada = bandejaEntrada;
+    }
+
 }

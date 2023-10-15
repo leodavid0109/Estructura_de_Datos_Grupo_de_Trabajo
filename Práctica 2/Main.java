@@ -13,14 +13,14 @@ public class Main {
 //        registro.toFilePassword("Password.txt");
 
         // Importación de archivos de los empleados y sus respectivos datos de ingreso
-        registro.importFileEmpleadosP("Empleados.txt");
-        registro.importFilePasswordP("Password.txt");
+        registro.importFileEmpleados("Empleados.txt");
+        registro.importFilePassword("Password.txt");
 
         // Importación de todas las bandejas de entradas
         registro.importBandejaEntrada();
 
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Bienvenidos a la aplicación de mesajeria.Inicie Sesión.");
+        System.out.println("Bienvenidos a la aplicación de mesajería. Inicie Sesión.");
         System.out.print("Número de Identificación: ");
         long cedula = scanner.nextLong();
         scanner.nextLine();
@@ -36,9 +36,9 @@ public class Main {
         Empleado usuario = checkLogin(cedula, contrasena,registro);
         if (usuario != null) {
             loggedIn = true;
-            System.out.println("¡Bienvenido!Has ingresado correctamente.");
+            System.out.println("¡Bienvenido! Has ingresado correctamente.");
         } else {
-            System.out.println("¡Error!Las credenciales no coinciden, intente nuevamente.");
+            System.out.println("¡Error! Las credenciales no coinciden, intente nuevamente.");
             scanner.close();
             return;
         }
@@ -50,10 +50,10 @@ public class Main {
             while (running) {
                 System.out.println("Por favor seleccione una opción:");
                 System.out.println("1. Bandeja de Entrada");
-                System.out.println("2. Mensajes leidos");
+                System.out.println("2. Mensajes leídos");
                 System.out.println("3. Borradores");
                 System.out.println("4. Enviar Mensajes");
-                System.out.println("5. salir");
+                System.out.println("5. Salir");
                 int choice = scanner.nextInt();
                 scanner.nextLine(); // consume newline character
                 switch (choice) {
@@ -82,16 +82,16 @@ public class Main {
         }else{
             boolean running = true;
             while (running) {
-                System.out.println("Please select an option:");
-                System.out.println("1. Check inbox");
-                System.out.println("2. Write message");
-                System.out.println("3. View drafts");
-                System.out.println("4. Discard draft");
-                System.out.println("5. Send draft");
-                System.out.println("6. Register new employee");
-                System.out.println("7. Change passwords");
-                System.out.println("8. Delete user");
-                System.out.println("9. Exit");
+                System.out.println("Por favor seleccione una opción:");
+                System.out.println("1. Bandeja de Entrada");
+                System.out.println("2. Mensajes leídos");
+                System.out.println("3. Borradores");
+                System.out.println("4. Enviar Mensajes");
+                System.out.println("5. Ver usuarios");
+                System.out.println("6. Registrar un nuevo usuario");
+                System.out.println("7. Cambiar contraseñas");
+                System.out.println("8. Eliminar usuario");
+                System.out.println("9. Salir");
                 int choice = scanner.nextInt();
                 scanner.nextLine(); // consume newline character
                 switch (choice) {
@@ -140,7 +140,8 @@ public class Main {
                         System.out.println("Draft discarded.");
                         break;
                     case 5:
-//                    inbox.sendDraft();
+                        // Visualización de la lista de empleados por parte del administrador
+                        mostrarListaEmpleados(registro);
                         break;
                     case 6:
                         // Registrar nuevo Empleado
@@ -163,7 +164,7 @@ public class Main {
 
     private static Empleado checkLogin(long cedula, String contrasena,Registro registro) {
         // check login credentials in database or file
-        DoubleNode nodo = registro.first();
+        DoubleNode nodo = registro.getRegistro().first();
         Empleado u = null;
         if (nodo!=null){u= (Empleado) nodo.getData();}
 //        Recorremos nodo por nodo y luego asignamos a u el objeto almacenado en ese nodo
@@ -224,5 +225,13 @@ public class Main {
         }
     }
 
+    private static void mostrarListaEmpleados(Registro registro) {
+        System.out.println("==== Lista de Usuarios ====");
+        if (registro.getRegistro().isEmpty()) {
+            System.out.println("No hay usuarios");
+            return;
+        }
+        //Main.impresionEmpleados(registro);
+    }
 
 }
