@@ -17,10 +17,10 @@ public class Main {
         registro.importFileEmpleados("Empleados.txt");
         registro.importFilePassword("Password.txt");
 
-//        mostrarListaEmpleados(registro);
-
         // Importación de todas las bandejas de mensajería
         registro.importBandejaEntrada();
+        registro.importLeidos();
+        registro.importBorradores();
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("==== Aplicación de Mensajería Interna ====");
@@ -76,7 +76,11 @@ public class Main {
                         redactarMensaje(usuario, registro);
                     case 5:
                         running = false;
-                        registro.toFileInbox();
+                        registro.toFileEmpleados("Empleados.txt");
+                        registro.toFilePassword("Password.txt");
+                        registro.toFileBandeja();
+                        registro.toFileLeidos();
+                        registro.toFileBorradores();
                         break;
                     default:
                         System.out.println("Entrada no válida. Intente de nuevo");
@@ -114,12 +118,25 @@ public class Main {
                     case 6:
                         registrarNuevoEmpleado(registro);
                     case 7:
-                        // Modificar Contraseñas
+                        modificarContrasenas(registro);
                     case 8:
-                        // Eliminar Usuarios
+                        System.out.println("Ingrese la cédula del empleado que desea eliminar: ");
+                        int CCEmpleadoEliminar = scanner.nextInt();
+                        if (CCEmpleadoEliminar == usuario.getCedula()){
+                            System.out.println("No puede eliminar su propio usuario. Para hacerlo, ingrese desde otro administrador.");
+                        }
+                        else{
+                            //REVISAR COMO SE VA A ELIMINAR EL ARCHIVO DEL EMPLEADO ELIMINADO
+                            registro.eliminar(CCEmpleadoEliminar);
+                        }
+                        break;
                     case 9:
                         running = false;
-                        registro.toFileInbox();
+                        registro.toFileEmpleados("Empleados.txt");
+                        registro.toFilePassword("Password.txt");
+                        registro.toFileBandeja();
+                        registro.toFileLeidos();
+                        registro.toFileBorradores();
                         break;
                     default:
                         System.out.println("Entrada no válida. Intente de nuevo");
@@ -163,6 +180,11 @@ public class Main {
         }
         System.out.println("Escoja por favor el correo que desea ver: ");
         int correo = scanner.nextInt();
+        while (correo < 1 | correo > empleado.getBandejaEntrada().size()){
+            System.out.println("Entrada no válida. Intente de nuevo");
+            System.out.println("Escoja por favor el correo que desea ver: ");
+            correo = scanner.nextInt();
+        }
         DoubleNode nodo = empleado.buscarNodoBandejaEntrada(correo);
         Message correoLeido = (Message) empleado.getBandejaEntrada().remove(nodo);
         System.out.println(correoLeido);
@@ -287,11 +309,10 @@ public class Main {
         }
     }
 
-    // REVISAR PARA CREACIÓN CON CONTRASEÑA, EN RANDOM Y EN MANUAL
     public static void registrarNuevoEmpleado(Registro registro){
         Scanner scanner = new Scanner(System.in);
         System.out.println("==== Agregar un nuevo empleado ====");
-        System.out.println("¿Desea crear un empleado con datos random? (S/N)");
+        System.out.println("¿Desea crear un empleado con datos random?(Se crearán con puesto empleado) (S/N)");
         char respuesta = scanner.next().charAt(0);
         if (respuesta == 'S' || respuesta == 's') {
             System.out.print("Ingrese la cantidad de empleados random que desea crear: ");
@@ -333,8 +354,22 @@ public class Main {
             String nuevaNomenclatura = direccion[2];
             String nuevoBarrio = direccion[3];
             String nuevaCiudad = direccion[4];
-            Direccion nuevaDireccion = new Direccion(nuevaCalle, nuevoNoCalle, nuevaNomenclatura, nuevoBarrio,
-                    nuevaCiudad);
+
+            Direccion nuevaDireccion;
+
+            System.out.println("¿Desea añadir información de apartamento? (S/N)");
+            char rta = scanner.next().charAt(0);
+            if (rta == 'S' || rta == 's') {
+                System.out.print("Ingrese el nombre de la urbanización: ");
+                String urbanizacion = scanner.nextLine();
+                System.out.println("Ingrese el número de apartamento");
+                String apartamento = scanner.nextLine();
+
+                nuevaDireccion = new Direccion(nuevaCalle, nuevoNoCalle, nuevaNomenclatura, nuevoBarrio, nuevaCiudad, urbanizacion, apartamento);
+            }
+            else {
+                nuevaDireccion = new Direccion(nuevaCalle, nuevoNoCalle, nuevaNomenclatura, nuevoBarrio, nuevaCiudad);
+            }
 
             System.out.print("Ingrese el número de teléfono: ");
             long nuevoTel = scanner.nextLong();
@@ -343,8 +378,32 @@ public class Main {
             System.out.print("Ingrese el correo electrónico: ");
             String nuevoEmail = scanner.nextLine();
 
-            Empleado nuevoUsuario = new Empleado(nuevoId, nuevoNombre, nuevaFecha, nuevaCiudadNac,
-                    nuevoTel, nuevoEmail, nuevaDireccion);
+            System.out.print("Ingrese la contraseña: ");
+            String contrasena = scanner.nextLine();
+
+            System.out.println("Seleccione el puesto del nuevo usuario: " +
+                    "\n1. Empleado" +
+                    "\n2. Administrador");
+
+            int puesto = scanner.nextInt();
+            while (puesto < 1 | puesto > 2){
+                System.out.println("Entrada no válida. Intente de nuevo");
+                System.out.println("Seleccione el puesto del nuevo usuario: " +
+                        "\n1. Empleado" +
+                        "\n2. Administrador");
+                puesto = scanner.nextInt();
+            }
+
+            Empleado nuevoUsuario;
+            if (puesto == 1){
+                nuevoUsuario = new Empleado(nuevoId, nuevoNombre, nuevaFecha, nuevaCiudadNac,
+                        nuevoTel, nuevoEmail, nuevaDireccion, contrasena, Categoria.Empleado);
+            }
+            else {
+                nuevoUsuario = new Empleado(nuevoId, nuevoNombre, nuevaFecha, nuevaCiudadNac,
+                        nuevoTel, nuevoEmail, nuevaDireccion, contrasena, Categoria.Administrador);
+            }
+
             boolean agregado = registro.agregar(nuevoUsuario);
             if (agregado) {
                 System.out.println("Usuario agregado exitosamente.");
@@ -365,18 +424,54 @@ public class Main {
         Fecha nuevaFecha = new Fecha(random.nextInt(28) + 1, random.nextInt(12) + 1, random.nextInt(21) + 2000);
         String nuevaCiudadNac = "CiudadRandom" + (random.nextInt(10) + 1); // Ciudad entre 1 y 10
         Direccion nuevaDireccion = new Direccion("CalleRandom", random.nextInt(500) + 1, "NomenclaturaRandom",
-                "BarrioRandom", "CiudadRandom");
+                "BarrioRandom", "CiudadRandom", "UrbanizaciónRandom", (random.nextInt(20) + 1) + "" + (random.nextInt(12) + 1));
         long nuevoTel = 3000000000L + random.nextInt(1000000000); // Teléfono aleatorio
         String nuevoEmail = "usuario" + nuevoId + "@random.com";
+        String contrasena = "con" + nuevoId + "ran*";
 
         Empleado nuevoUsuario = new Empleado(nuevoId, nuevoNombre, nuevaFecha, nuevaCiudadNac, nuevoTel,
-                nuevoEmail, nuevaDireccion);
+                nuevoEmail, nuevaDireccion, contrasena, Categoria.Empleado);
         boolean agregado = registro.agregar(nuevoUsuario);
         if (agregado) {
             System.out.println("Usuario agregado exitosamente.");
         } else {
             System.out.println("No se pudo agregar el usuario.");
         }
+    }
+
+    private static void modificarContrasenas(Registro registro){
+        System.out.println("==== Lista de Empleados con Contraseñas ====");
+        Main.impresionContrasenas(registro.getRegistro());
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Seleccione por favor el empleado al cual le desea cambiar la contraseña: ");
+        int eleccionempleado = scanner.nextInt();
+        while (eleccionempleado < 1 | eleccionempleado > registro.getRegistro().size()){
+            System.out.println("Entrada no válida. Intente de nuevo");
+            System.out.println("Seleccione por favor el empleado al cual le desea cambiar la contraseña: ");
+            eleccionempleado = scanner.nextInt();
+        }
+
+        Empleado empleado = (Empleado) registro.buscarNodoPosicion(eleccionempleado).getData();
+
+        System.out.println("Ingrese la nueva contraseña: ");
+        String contrasena = scanner.nextLine();
+        System.out.println("Confirme la contraseña: ");
+        String confirmacion = scanner.nextLine();
+        while (!contrasena.equals(confirmacion) | contrasena.equals(empleado.getContrasena())){
+            if (contrasena.equals(empleado.getContrasena())){
+                System.out.println("La contraseña ingresada no es válida. Intente de nuevo.");
+            }
+            else {
+                System.out.println("Las contraseñas ingresadas no coinciden. Intente de nuevo.");
+            }
+            System.out.println("Ingrese la nueva contraseña: ");
+            contrasena = scanner.nextLine();
+            System.out.println("Confirme la contraseña: ");
+            confirmacion = scanner.nextLine();
+        }
+
+        empleado.setContrasena(contrasena);
     }
 
     private static void mostrarListaEmpleados(Registro registro) {
@@ -409,4 +504,25 @@ public class Main {
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
+    private static void impresionContrasenas(DoubleList registro){
+        String[] indices_tabla = {"NOMBRE", "CC", "CONTRASEÑA"};
+
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%4s %20s %10s %20s",
+                "#", indices_tabla[0], indices_tabla[1], indices_tabla[2]);
+        System.out.println();
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        DoubleNode nodo = registro.first();
+        int i = 1;
+        while (nodo != null){
+            Empleado empleado = (Empleado) nodo.getData();
+            System.out.printf("%4d %20s %10d %20s",
+                    i, empleado.getNombre(), empleado.getCedula(), empleado.getContrasena());
+            System.out.println();
+            nodo = nodo.getNext();
+            i++;
+        }
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
 }
