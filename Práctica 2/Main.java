@@ -17,6 +17,11 @@ public class Main {
         registro.importFileEmpleados("Empleados.txt");
         registro.importFilePassword("Password.txt");
 
+        // Creación inicial de los archivos para los empleados existentes
+//        registro.toFileBandeja();
+//        registro.toFileLeidos();
+//        registro.toFileBorradores();
+
         // Importación de todas las bandejas de mensajería
         registro.importBandejaEntrada();
         registro.importLeidos();

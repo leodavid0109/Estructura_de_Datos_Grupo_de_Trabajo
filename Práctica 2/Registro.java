@@ -346,7 +346,7 @@ public class Registro {
                     mensajeNodo = mensajeNodo.getNext();
                     i++;
                 }
-                System.out.println("Bandeja de entrada para " + empleado.getCedula() + "guardada en: " + "BandejaEntrada/" + empleado.getCedula() + "BA.txt");
+                System.out.println("Bandeja de entrada para " + empleado.getCedula() + " guardada en: " + "BandejaEntrada/" + empleado.getCedula() + "BA.txt");
             } catch (IOException e) {
                 System.out.println("Error al exportar bandeja de entrada: " + e.getMessage());
             }
@@ -373,7 +373,7 @@ public class Registro {
                     mensaje = (Message) empleado.getCorreosLeidos().dequeue();
                     i++;
                 }
-                System.out.println("Bandeja de entrada para " + empleado.getCedula() + "guardada en: " + "MensajesLeidos/" + empleado.getCedula() + "ML.txt");
+                System.out.println("Bandeja de entrada para " + empleado.getCedula() + " guardada en: " + "MensajesLeidos/" + empleado.getCedula() + "ML.txt");
             } catch (IOException e) {
                 System.out.println("Error al exportar bandeja de entrada: " + e.getMessage());
             }
@@ -400,7 +400,7 @@ public class Registro {
                     mensaje = (Message) empleado.getBorradores().pop();
                     i++;
                 }
-                System.out.println("Bandeja de entrada para " + empleado.getCedula() + "guardada en: " + "Borradores/" + empleado.getCedula() + "B.txt");
+                System.out.println("Bandeja de entrada para " + empleado.getCedula() + " guardada en: " + "Borradores/" + empleado.getCedula() + "B.txt");
             } catch (IOException e) {
                 System.out.println("Error al exportar bandeja de entrada: " + e.getMessage());
             }
