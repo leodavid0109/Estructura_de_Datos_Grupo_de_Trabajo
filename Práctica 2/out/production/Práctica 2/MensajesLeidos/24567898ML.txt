@@ -2,3 +2,5 @@
 #    REMITENTE    DESTINATARIO    FECHA                               TITULO                                   CONTENIDO                                                                                           
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1    34568910     24567898        2023-10-18T22:23:26.377535300       Inicio de Semana                         Saludo de inicio y buen deseo de inicio de semana                                                   
+2    34568910     24567898        2023-10-18T22:24:14.170038900       Corrección Nota Examen                   La presente es informando que esta subida la nota                                                   

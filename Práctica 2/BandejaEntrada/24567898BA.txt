@@ -2,5 +2,5 @@
 #    REMITENTE    DESTINATARIO    FECHA                               TITULO                                   CONTENIDO                                                                                           
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-1    12345678     24567898        2023-10-18T22:10:56.948323500       Confirmación Cita                        Su cita fue asignada a tal hora, recuerdelo por favor.                                              
-2    34568910     24567898        2023-10-18T22:23:49.795678300       Entrega Examen                           Adjunto examen debidamente revisado                                                                 
+1    34568910     24567898        2023-10-18T22:23:49.795678300       Entrega Examen                           Adjunto examen debidamente revisado                                                                 
+2    12345678     24567898        2023-10-18T22:10:56.948323500       Confirmación Cita                        Su cita fue asignada a tal hora, recuerdelo por favor.                                              
