@@ -26,14 +26,17 @@ public class Registro {
         return true;
     }
 
-    public void eliminar(long cedula) {
+    public Empleado eliminar(long cedula) {
         DoubleNode nodo = buscarNodoCedula(cedula);
         if(nodo != null){
             registro.remove(nodo);
+            Empleado eliminado = (Empleado) nodo.getData();
             System.out.println("Empleado con CC " + cedula + " eliminado.");
+            return eliminado;
         }
         else{
             System.out.println("No se encuentra un usuario con este número de documento");
+            return null;
         }
     }
 
@@ -81,7 +84,6 @@ public class Registro {
                 nodo = nodo.getNext();
                 i++;
             }
-            System.out.println("Datos guardados en el archivo: " + fileName);
         } catch (IOException e) {
             System.out.println("Error al escribir en el archivo: " + e.getMessage());
         }
@@ -127,7 +129,6 @@ public class Registro {
                 Empleado empleado = new Empleado(id, nombre, fecha, ciudadNac, tel, email, direccion_final);
                 agregar(empleado);
             }
-            System.out.println("Datos importados desde el archivo: " + fileName);
         } catch (FileNotFoundException e) {
             System.out.println("Archivo no encontrado: " + e.getMessage());
         }
@@ -188,7 +189,6 @@ public class Registro {
                 nodo = nodo.getNext();
                 i++;
             }
-            System.out.println("Datos guardados en el archivo: " + fileName);
         } catch (IOException e) {
             System.out.println("Error al escribir en el archivo: " + e.getMessage());
         }
@@ -222,7 +222,6 @@ public class Registro {
                     nodo = nodo.getNext();
                 }
             }
-            System.out.println("Datos importados desde el archivo: " + fileName);
         } catch (FileNotFoundException e) {
             System.out.println("Archivo no encontrado: " + e.getMessage());
         }
@@ -257,7 +256,7 @@ public class Registro {
         }
     }
 
-    public void importBandejaEntrada(){
+    public void importBandejaEntrada(Registro eliminados){
         DoubleNode nodo = registro.first();
         while (nodo != null){
             Empleado usuario = (Empleado) nodo.getData();
@@ -268,9 +267,17 @@ public class Registro {
                 scanner.nextLine();
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine();
-                    Empleado remitente =  (Empleado) buscarNodoCedula(Long.parseLong(line.substring(4, 16).trim())).getData();
-                    Empleado destinatario =  (Empleado) buscarNodoCedula(Long.parseLong(line.substring(16, 31).trim())).getData();
-                    Message mensaje = new Message(remitente, destinatario, LocalDateTime.parse(line.substring(31, 61).trim()),line.substring(61, 101).trim(),line.substring(101).trim());
+                    DoubleNode nremitente = buscarNodoCedula(Long.parseLong(line.substring(4, 16).trim()));
+                    if (nremitente == null){
+                        nremitente = eliminados.buscarNodoCedula(Long.parseLong(line.substring(4, 16).trim()));
+                    }
+                    Empleado remitente = (Empleado) nremitente.getData();
+                    DoubleNode ndestinatario = buscarNodoCedula(Long.parseLong(line.substring(16, 31).trim()));
+                    if (ndestinatario == null){
+                        ndestinatario = eliminados.buscarNodoCedula(Long.parseLong(line.substring(16, 31).trim()));
+                    }
+                    Empleado destinatario = (Empleado) ndestinatario.getData();
+                    Message mensaje = new Message(remitente, destinatario, LocalDateTime.parse(line.substring(31, 66).trim()),line.substring(66, 106).trim(),line.substring(106).trim());
                     usuario.agregarMensajeBandejaEntrada(mensaje);
                 }
             } catch (FileNotFoundException e) {
@@ -280,7 +287,7 @@ public class Registro {
         }
     }
 
-    public void importLeidos(){
+    public void importLeidos(Registro eliminados){
         DoubleNode nodo = registro.first();
         while (nodo != null){
             Empleado usuario = (Empleado) nodo.getData();
@@ -291,9 +298,17 @@ public class Registro {
                 scanner.nextLine();
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine();
-                    Empleado remitente =  (Empleado) buscarNodoCedula(Long.parseLong(line.substring(4, 16).trim())).getData();
-                    Empleado destinatario =  (Empleado) buscarNodoCedula(Long.parseLong(line.substring(16, 31).trim())).getData();
-                    Message mensaje = new Message(remitente, destinatario, LocalDateTime.parse(line.substring(31, 61).trim()),line.substring(61, 101).trim(),line.substring(101).trim());
+                    DoubleNode nremitente = buscarNodoCedula(Long.parseLong(line.substring(4, 16).trim()));
+                    if (nremitente == null){
+                        nremitente = eliminados.buscarNodoCedula(Long.parseLong(line.substring(4, 16).trim()));
+                    }
+                    Empleado remitente = (Empleado) nremitente.getData();
+                    DoubleNode ndestinatario = buscarNodoCedula(Long.parseLong(line.substring(16, 31).trim()));
+                    if (ndestinatario == null){
+                        ndestinatario = eliminados.buscarNodoCedula(Long.parseLong(line.substring(16, 31).trim()));
+                    }
+                    Empleado destinatario = (Empleado) ndestinatario.getData();
+                    Message mensaje = new Message(remitente, destinatario, LocalDateTime.parse(line.substring(31, 66).trim()),line.substring(66, 106).trim(),line.substring(106).trim());
                     usuario.getCorreosLeidos().enqueue(mensaje);
                 }
             } catch (FileNotFoundException e) {
@@ -303,7 +318,7 @@ public class Registro {
         }
     }
 
-    public void importBorradores(){
+    public void importBorradores(Registro eliminados){
         DoubleNode nodo = registro.first();
         while (nodo != null){
             Empleado usuario = (Empleado) nodo.getData();
@@ -314,9 +329,17 @@ public class Registro {
                 scanner.nextLine();
                 while (scanner.hasNextLine()) {
                     String line = scanner.nextLine();
-                    Empleado remitente =  (Empleado) buscarNodoCedula(Long.parseLong(line.substring(4, 16).trim())).getData();
-                    Empleado destinatario =  (Empleado) buscarNodoCedula(Long.parseLong(line.substring(16, 31).trim())).getData();
-                    Message mensaje = new Message(remitente, destinatario, LocalDateTime.parse(line.substring(31, 61).trim()),line.substring(61, 101).trim(),line.substring(101).trim());
+                    DoubleNode nremitente = buscarNodoCedula(Long.parseLong(line.substring(4, 16).trim()));
+                    if (nremitente == null){
+                        nremitente = eliminados.buscarNodoCedula(Long.parseLong(line.substring(4, 16).trim()));
+                    }
+                    Empleado remitente = (Empleado) nremitente.getData();
+                    DoubleNode ndestinatario = buscarNodoCedula(Long.parseLong(line.substring(16, 31).trim()));
+                    if (ndestinatario == null){
+                        ndestinatario = eliminados.buscarNodoCedula(Long.parseLong(line.substring(16, 31).trim()));
+                    }
+                    Empleado destinatario = (Empleado) ndestinatario.getData();
+                    Message mensaje = new Message(remitente, destinatario, LocalDateTime.parse(line.substring(31, 66).trim()),line.substring(66, 106).trim(),line.substring(106).trim());
                     usuario.agregarMensajeBorradores(mensaje);
                 }
             } catch (FileNotFoundException e) {
@@ -334,7 +357,7 @@ public class Registro {
             Empleado empleado = (Empleado) nodo.getData();
             try (PrintWriter writer = new PrintWriter(new FileWriter("BandejaEntrada/" + empleado.getCedula() + "BA.txt"))) {
                 writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-                writer.write(String.format("%-4s %-12s %-15s %-30s %-40s %-100s\n", "#", encabezados[0], encabezados[1], encabezados[2], encabezados[3], encabezados[4]));
+                writer.write(String.format("%-4s %-12s %-15s %-35s %-40s %-100s\n", "#", encabezados[0], encabezados[1], encabezados[2], encabezados[3], encabezados[4]));
                 writer.print("\n");
                 writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                 // Pasamos mensaje por mensaje y lo guardamos en el archivo
@@ -342,11 +365,10 @@ public class Registro {
                 int i = 1;
                 while (mensajeNodo != null) {
                     Message mensaje = (Message) mensajeNodo.getData();
-                    writer.write(String.format("%-4d %-12s %-15s %-30s %-40s %-100s\n", i, mensaje.getRemitente().getCedula(), mensaje.getDestinatario().getCedula(), mensaje.getFecha(), mensaje.getTitulo(), mensaje.getContenido()));
+                    writer.write(String.format("%-4d %-12s %-15s %-35s %-40s %-100s\n", i, mensaje.getRemitente().getCedula(), mensaje.getDestinatario().getCedula(), mensaje.getFecha(), mensaje.getTitulo(), mensaje.getContenido()));
                     mensajeNodo = mensajeNodo.getNext();
                     i++;
                 }
-                System.out.println("Bandeja de entrada para " + empleado.getCedula() + " guardada en: " + "BandejaEntrada/" + empleado.getCedula() + "BA.txt");
             } catch (IOException e) {
                 System.out.println("Error al exportar bandeja de entrada: " + e.getMessage());
             }
@@ -362,18 +384,17 @@ public class Registro {
             Empleado empleado = (Empleado) nodo.getData();
             try (PrintWriter writer = new PrintWriter(new FileWriter("MensajesLeidos/" + empleado.getCedula() + "ML.txt"))) {
                 writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-                writer.write(String.format("%-4s %-12s %-15s %-30s %-40s %-100s\n", "#", encabezados[0], encabezados[1], encabezados[2], encabezados[3], encabezados[4]));
+                writer.write(String.format("%-4s %-12s %-15s %-35s %-40s %-100s\n", "#", encabezados[0], encabezados[1], encabezados[2], encabezados[3], encabezados[4]));
                 writer.print("\n");
                 writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                 // Pasamos mensaje por mensaje y lo guardamos en el archivo
                 Message mensaje = (Message) empleado.getCorreosLeidos().dequeue();
                 int i = 1;
                 while (mensaje != null) {
-                    writer.write(String.format("%-4d %-12s %-15s %-30s %-40s %-100s\n", i, mensaje.getRemitente().getCedula(), mensaje.getDestinatario().getCedula(), mensaje.getFecha(), mensaje.getTitulo(), mensaje.getContenido()));
+                    writer.write(String.format("%-4d %-12s %-15s %-35s %-40s %-100s\n", i, mensaje.getRemitente().getCedula(), mensaje.getDestinatario().getCedula(), mensaje.getFecha(), mensaje.getTitulo(), mensaje.getContenido()));
                     mensaje = (Message) empleado.getCorreosLeidos().dequeue();
                     i++;
                 }
-                System.out.println("Bandeja de entrada para " + empleado.getCedula() + " guardada en: " + "MensajesLeidos/" + empleado.getCedula() + "ML.txt");
             } catch (IOException e) {
                 System.out.println("Error al exportar bandeja de entrada: " + e.getMessage());
             }
@@ -389,18 +410,17 @@ public class Registro {
             Empleado empleado = (Empleado) nodo.getData();
             try (PrintWriter writer = new PrintWriter(new FileWriter("Borradores/" + empleado.getCedula() + "B.txt"))) {
                 writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-                writer.write(String.format("%-4s %-12s %-15s %-30s %-40s %-100s\n", "#", encabezados[0], encabezados[1], encabezados[2], encabezados[3], encabezados[4]));
+                writer.write(String.format("%-4s %-12s %-15s %-35s %-40s %-100s\n", "#", encabezados[0], encabezados[1], encabezados[2], encabezados[3], encabezados[4]));
                 writer.print("\n");
                 writer.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                 // Pasamos mensaje por mensaje y lo guardamos en el archivo
                 Message mensaje = (Message) empleado.getBorradores().pop();
                 int i = 1;
                 while (mensaje != null) {
-                    writer.write(String.format("%-4d %-12s %-15s %-30s %-40s %-100s\n", i, mensaje.getRemitente().getCedula(), mensaje.getDestinatario().getCedula(), mensaje.getFecha(), mensaje.getTitulo(), mensaje.getContenido()));
+                    writer.write(String.format("%-4d %-12s %-15s %-35s %-40s %-100s\n", i, mensaje.getRemitente().getCedula(), mensaje.getDestinatario().getCedula(), mensaje.getFecha(), mensaje.getTitulo(), mensaje.getContenido()));
                     mensaje = (Message) empleado.getBorradores().pop();
                     i++;
                 }
-                System.out.println("Bandeja de entrada para " + empleado.getCedula() + " guardada en: " + "Borradores/" + empleado.getCedula() + "B.txt");
             } catch (IOException e) {
                 System.out.println("Error al exportar bandeja de entrada: " + e.getMessage());
             }

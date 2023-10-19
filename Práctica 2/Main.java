@@ -1,10 +1,15 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Random;
 import java.util.Scanner;
 import Estructuras.*;
+import java.io.File;
 public class Main {
     public static void main(String[] args) {
 
         Registro registro = new Registro();
+        Registro eliminados = new Registro();
 
         // Transición de archivo enviado para la práctica a tipología de archivos propia
 //        registro.importFileEmpleadosP("empleadosOriginal.txt");
@@ -16,6 +21,7 @@ public class Main {
         // Importación de archivos de los empleados y sus respectivos datos de ingreso
         registro.importFileEmpleados("Empleados.txt");
         registro.importFilePassword("Password.txt");
+        eliminados.importFileEmpleados("Eliminados.txt");
 
         // Creación inicial de los archivos para los empleados existentes
 //        registro.toFileBandeja();
@@ -23,9 +29,9 @@ public class Main {
 //        registro.toFileBorradores();
 
         // Importación de todas las bandejas de mensajería
-        registro.importBandejaEntrada();
-        registro.importLeidos();
-        registro.importBorradores();
+        registro.importBandejaEntrada(eliminados);
+        registro.importLeidos(eliminados);
+        registro.importBorradores(eliminados);
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("==== Aplicación de Mensajería Interna ====");
@@ -73,12 +79,16 @@ public class Main {
                 switch (choice) {
                     case 1:
                         bandejaEntrada(usuario);
+                        break;
                     case 2:
                         mensajesLeidos(usuario);
+                        break;
                     case 3:
-                        borradores(usuario);
+                        borradores(usuario, registro);
+                        break;
                     case 4:
                         redactarMensaje(usuario, registro);
+                        break;
                     case 5:
                         running = false;
                         registro.toFileEmpleados("Empleados.txt");
@@ -89,6 +99,7 @@ public class Main {
                         break;
                     default:
                         System.out.println("Entrada no válida. Intente de nuevo");
+                        break;
                 }
                 System.out.println();
             }
@@ -111,19 +122,25 @@ public class Main {
                 switch (choice) {
                     case 1:
                         bandejaEntrada(usuario);
+                        break;
                     case 2:
                         mensajesLeidos(usuario);
+                        break;
                     case 3:
-                        borradores(usuario);
+                        borradores(usuario, registro);
+                        break;
                     case 4:
                         redactarMensaje(usuario, registro);
+                        break;
                     case 5:
                         mostrarListaEmpleados(registro);
                         break;
                     case 6:
                         registrarNuevoEmpleado(registro);
+                        break;
                     case 7:
                         modificarContrasenas(registro);
+                        break;
                     case 8:
                         System.out.println("Ingrese la cédula del empleado que desea eliminar: ");
                         int CCEmpleadoEliminar = scanner.nextInt();
@@ -131,8 +148,16 @@ public class Main {
                             System.out.println("No puede eliminar su propio usuario. Para hacerlo, ingrese desde otro administrador.");
                         }
                         else{
-                            //REVISAR COMO SE VA A ELIMINAR EL ARCHIVO DEL EMPLEADO ELIMINADO
-                            registro.eliminar(CCEmpleadoEliminar);
+                            Empleado eliminado = registro.eliminar(CCEmpleadoEliminar);
+                            if (eliminado != null){
+                                eliminados.agregar(eliminado);
+                                File archivo1 = new File("BandejaEntrada/" + eliminado.getCedula() + "BA.txt");
+                                archivo1.delete();
+                                File archivo2 = new File("Borradores/" + eliminado.getCedula() + "B.txt");
+                                archivo2.delete();
+                                File archivo3 = new File("MensajesLeidos/" + eliminado.getCedula() + "ML.txt");
+                                archivo3.delete();
+                            }
                         }
                         break;
                     case 9:
@@ -142,6 +167,7 @@ public class Main {
                         registro.toFileBandeja();
                         registro.toFileLeidos();
                         registro.toFileBorradores();
+                        eliminados.toFileEmpleados("Eliminados.txt");
                         break;
                     default:
                         System.out.println("Entrada no válida. Intente de nuevo");
@@ -191,10 +217,10 @@ public class Main {
             correo = scanner.nextInt();
         }
         DoubleNode nodo = empleado.buscarNodoBandejaEntrada(correo);
-        Message correoLeido = (Message) empleado.getBandejaEntrada().remove(nodo);
+        Message correoLeido = (Message) nodo.getData();
+        empleado.getBandejaEntrada().remove(nodo);
         System.out.println(correoLeido);
         empleado.getCorreosLeidos().enqueue(correoLeido);
-        scanner.close();
     }
 
     public static void mensajesLeidos(Empleado empleado){
@@ -207,6 +233,7 @@ public class Main {
         Message leido = (Message) mensajes.dequeue();
         System.out.println("MENSAJE:");
         System.out.println(leido);
+
         Scanner scanner = new Scanner(System.in);
         while(!mensajes.isEmpty()){
             boolean validacionLectura = true;
@@ -216,7 +243,6 @@ public class Main {
                 if (validacion.equals("Y") | validacion.equals("y")){
                     validacionLectura = false;
                 } else if (validacion.equals("N") | validacion.equals("n")) {
-                    scanner.close();
                     return;
                 }
                 else{
@@ -227,10 +253,9 @@ public class Main {
             System.out.println("MENSAJE:");
             System.out.println(leido);
         }
-        scanner.close();
     }
 
-    public static void borradores(Empleado empleado){
+    public static void borradores(Empleado empleado, Registro registro){
         System.out.println("===== Borradores =====");
         Stack borradores = empleado.getBorradores();
         if (borradores.isEmpty()){
@@ -238,7 +263,6 @@ public class Main {
             return;
         }
         Message borrador = (Message) borradores.top();
-        System.out.println("MENSAJE:");
         System.out.println(borrador);
         Scanner scanner = new Scanner(System.in);
 
@@ -256,7 +280,13 @@ public class Main {
             switch (eleccion){
                 case 1:
                     borrador.getDestinatario().agregarMensajeBandejaEntrada(borrador);
-                    System.out.println("Mensaje Enviado.");
+                    if (registro.buscarNodoCedula(borrador.getDestinatario().getCedula()) == null){
+                        System.out.println("El destinatario de este correo ya no tiene credenciales. Borrador eliminado");
+                    }
+                    else{
+                        System.out.println("Mensaje Enviado.");
+                    }
+                    borradores.pop();
                     validacionLectura = false;
                     break;
                 case 2:
@@ -342,7 +372,7 @@ public class Main {
             System.out.print("Ingrese el nombre del usuario: ");
             String nuevoNombre = scanner.nextLine();
 
-            System.out.println("Ingrese la fecha de nacimiento (dd mm aa): ");
+            System.out.println("Ingrese la fecha de nacimiento (dd mm aaaa): ");
             int nuevoDia = scanner.nextInt();
             int nuevoMes = scanner.nextInt();
             int nuevoAnio = scanner.nextInt();
@@ -365,7 +395,8 @@ public class Main {
             System.out.println("¿Desea añadir información de apartamento? (S/N)");
             char rta = scanner.next().charAt(0);
             if (rta == 'S' || rta == 's') {
-                System.out.print("Ingrese el nombre de la urbanización: ");
+                System.out.println("Ingrese el nombre de la urbanización: ");
+                scanner.nextLine();
                 String urbanizacion = scanner.nextLine();
                 System.out.println("Ingrese el número de apartamento");
                 String apartamento = scanner.nextLine();
