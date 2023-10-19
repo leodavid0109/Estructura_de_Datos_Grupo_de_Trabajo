@@ -64,8 +64,12 @@ public class DoubleList {
     public Object removeFirst(){
         if (isEmpty()){
             return null;
-        }
-        else{
+        } else if (size == 1) {
+            DoubleNode temp = head;
+            head = null;
+            size--;
+            return temp.getData();
+        } else{
             DoubleNode temp = head;
             head = temp.getNext();
             temp.setNext(null);

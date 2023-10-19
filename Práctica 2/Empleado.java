@@ -64,15 +64,15 @@ public class Empleado {
 
         String[] indices_tabla = {"FECHA", "TITULO", "REMITENTE"};
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("%4s %20s %30s %20s",
+        System.out.printf("%4s %35s %40s %20s",
                 "#", indices_tabla[0], indices_tabla[1], indices_tabla[2]);
         System.out.println();
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         int i = 1;
         while (nodo != null){
             Message correo = (Message) nodo.getData();
-            System.out.printf("%4d %20s %30s %20s",
-                    i, correo.getFecha(), correo.getTitulo(), correo.getRemitente());
+            System.out.printf("%4d %35s %40s %20s",
+                    i, correo.getFecha(), correo.getTitulo(), correo.getRemitente().getNombre());
             System.out.println();
             nodo = nodo.getNext();
             i++;
@@ -85,6 +85,7 @@ public class Empleado {
         int i = 1;
         while (i < posicion){
             nodo = nodo.getNext();
+            i++;
         }
         return nodo;
     }

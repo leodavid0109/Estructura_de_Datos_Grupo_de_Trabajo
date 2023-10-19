@@ -47,6 +47,7 @@ public class Message {
 
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        return remitente.getCedula() + "," + destinatario.getCedula() + "," + fecha.format(formatter) + "," + titulo + "," + contenido;
+        return "===== Mensaje =====" + "\nRemitente: " + remitente.getNombre() + "\nDestinatario: " + destinatario.getNombre() + "\nFecha: " +
+                fecha.format(formatter) + "\nAsunto: " + titulo + "\nContenido: " + contenido + "\n===================";
     }
 }
