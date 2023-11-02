@@ -1,65 +1,66 @@
 from Estructuras.Node import Node
 
+
 class List:
     def __init__(self):
-        self.head = None
-        self.tail = None
-        self.size = 0
+        self._head = None
+        self._tail = None
+        self._size = 0
 
     def getSize(self):
-        return self.size
+        return self._size
 
     def isEmpty(self):
-        return self.size == 0
+        return self._size == 0
 
     def setSize(self, s):
-        self.size = s
+        self._size = s
 
     def First(self):
-        return self.head
+        return self._head
 
     def Last(self):
-        return self.tail
+        return self._tail
 
     def addFirst(self, e):
         n = Node(e)
         if self.isEmpty():
-            self.head = n
-            self.tail = n
+            self._head = n
+            self._tail = n
         else:
-            n.next = self.head
-            self.head = n
-        self.size += 1
+            n.next = self._head
+            self._head = n
+        self._size += 1
 
     def addLast(self, e):
         n = Node(e)
         if self.isEmpty():
-            self.head = n
-            self.tail = n
+            self._head = n
+            self._tail = n
         else:
-            self.tail.next = n
-            self.tail = n
-        self.size += 1
+            self._tail.next = n
+            self._tail = n
+        self._size += 1
 
     def removeFirst(self):
         if not self.isEmpty():
-            temp = self.head
-            self.head = temp.next
+            temp = self._head
+            self._head = temp.next
             temp.next = None
-            self.size -= 1
+            self._size -= 1
             return temp.data
         else:
             return None
 
     def removeLast(self):
-        if self.size == 1:
+        if self._size == 1:
             return self.removeFirst()
         else:
-            temp = self.tail
-            previous = self.head
-            while previous.next != self.tail:
+            temp = self._tail
+            previous = self._head
+            while previous.next != self._tail:
                 previous = previous.next
             previous.next = None
-            self.tail = previous
-            self.size -= 1
+            self._tail = previous
+            self._size -= 1
             return temp.data
