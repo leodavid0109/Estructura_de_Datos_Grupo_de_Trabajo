@@ -1,23 +1,23 @@
 class Node:
     def __init__(self, data=None):
-        self._data = data
-        self._left = None
-        self._right = None
+        self.data = data
+        self.left = None
+        self.right = None
 
     def getLeft(self):
-        return self._left
+        return self.left
 
     def getRight(self):
-        return self._right
+        return self.right
 
     def getData(self):
-        return self._data
+        return self.data
 
     def setLeft(self, node):
-        self._left = node
+        self.left = node
 
     def setRight(self, node):
-        self._right = node
+        self.right = node
 
     def setData(self, data):
-        self._data = data
+        self.data = data

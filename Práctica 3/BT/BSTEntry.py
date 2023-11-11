@@ -1,3 +1,4 @@
+from Usuario import Usuario
 class BSTEntry:
     def __init__(self, d, k):
         self.data = d
@@ -14,3 +15,6 @@ class BSTEntry:
 
     def setKey(self, k):
         self.k = k
+    
+    def __str__(self) -> str:
+        return f"Nombre: {self.getData().getNombre()} Cedula: {self.getData().getCedula()} Indice: {self.k}"

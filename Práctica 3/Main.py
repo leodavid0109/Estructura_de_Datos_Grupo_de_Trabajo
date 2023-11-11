@@ -1,6 +1,8 @@
 from Estructuras.List import List
 from BT.BinaryTree import BinaryTree
 from BT.BinarySearchTree import BinarySearchTree
+from Usuario import Usuario
+
 
 def Preorder(T, v):
     print(v.getData())  # visit(v)
@@ -23,7 +25,10 @@ def Posorder(T, v):
         Posorder(T, T.right(v))  # recursive call on right child
     print(v.getData())  # visit(v)
 
-class Main:
+
+
+
+class Test:
     def test_binary_tree():
         # Create a binary tree
         bt = BinaryTree()
@@ -95,6 +100,37 @@ class Main:
 
         print("All tests passed.")
 
+class Main:
+    opcion=""
+    arbol = BinaryTree()
+    bst = BinarySearchTree()
+
+    while opcion!="3":
+        print("\nMenú:")
+        print("1. Agregar usuario")
+        print("2. Ver árbol")
+        print("3. Salir")
+
+        opcion = input("Seleccione una opción (1/2/3): ")
+
+        if opcion == "1":
+            nombre = input("Ingrese el nombre del usuario: ")
+            cedula = input("Ingrese la celula del usuario: ")
+            usuario = Usuario(nombre,cedula)
+            k = 0
+            for n in cedula:
+                k+=int(n)
+            bst.insert(usuario,k)
+            
+        elif opcion == "2":
+            print("\nÁrbol de usuarios en Preorder:")
+            lista = Preorder(bst,bst.root)
+
+        elif opcion == "3":
+            print("Saliendo del programa. ¡Hasta luego!")
+        else:
+            print("Opción no válida. Por favor, seleccione 1, 2 o 3.")
+
+
 if __name__ == "__main__":
-    Main.test_binary_tree()
-    Main.test_binary_search_tree()
+    Main
