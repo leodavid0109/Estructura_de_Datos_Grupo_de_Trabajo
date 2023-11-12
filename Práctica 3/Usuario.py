@@ -1,16 +1,16 @@
 class Usuario:
-    def __init__(self,nombre,cedula):
-        self.nombre = nombre
-        self.cedula = cedula
+    def __init__(self, nombre, cedula):
+        self._nombre = nombre
+        self._cedula = cedula
 
     def getNombre(self):
-        return self.nombre
+        return self._nombre
 
     def getCedula(self):
-        return self.cedula
-    
-    def setNombre(self,nombre):
-        self.nombre = nombre
+        return self._cedula
 
-    def setCedula(self,cedula):
-        self.cedula = cedula
+    def setNombre(self, nombre):
+        self._nombre = nombre
+
+    def setCedula(self, cedula):
+        self._cedula = cedula
