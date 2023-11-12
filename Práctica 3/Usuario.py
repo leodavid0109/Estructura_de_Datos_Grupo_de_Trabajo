@@ -14,3 +14,12 @@ class Usuario:
 
     def setCedula(self, cedula):
         self._cedula = cedula
+
+    def __str__(self):
+        return "Nombre: " + self._nombre + ", Cedula: " + self._cedula
+
+    def sumaCedula(self):
+        suma = 0
+        for i in self._cedula:
+            suma += int(i)
+        return suma
