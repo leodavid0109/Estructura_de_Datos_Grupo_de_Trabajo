@@ -2,12 +2,13 @@ from Estructuras.Node import Node
 from BT.BinaryTree import BinaryTree
 from BT.BSTEntry import BSTEntry
 
+
 class BinarySearchTree(BinaryTree):
     def __init__(self):
         super().__init__()  # Call the initializer of the superclass
 
     def find(self, k):
-        return self.searchTree(k, self.root)
+        return self.searchTree(k, self._root)
 
     def searchTree(self, key, v):
         u = v.getData()
@@ -39,7 +40,7 @@ class BinarySearchTree(BinaryTree):
         if self.isEmpty():
             self.addRoot(O)
         else:
-            self.addEntry(self.root, O)
+            self.addEntry(self._root, O)
 
     def maxNode(self, temp):
         if self.hasRight(temp):
