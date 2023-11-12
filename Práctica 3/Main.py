@@ -48,7 +48,6 @@ def max(T, v):
     else:
         return v.getData()
 
-def impresionAB
 
 
 # Clase de pruebas de las clases BinaryTree y BinarySearchTree
@@ -120,7 +119,6 @@ class Test:
 
         # Test remove
         bst.remove(2)
-        print(bst.find(2).getData().getData())
         assert bst.find(2) is None
         assert bst.root().getRight().getData().getKey() == 3
 
