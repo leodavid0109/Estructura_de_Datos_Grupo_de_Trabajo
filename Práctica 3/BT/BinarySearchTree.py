@@ -48,6 +48,12 @@ class BinarySearchTree(BinaryTree):
         else:
             return temp
 
+    def minNode(self, temp):
+        if self.hasLeft(temp):
+            return self.minNode(self.left(temp))
+        else:
+            return temp
+
     def predecesor(self, v):
         temp = v.getLeft()
         return self.maxNode(temp)

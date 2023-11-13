@@ -18,8 +18,9 @@ class Usuario:
     def __str__(self):
         return "Nombre: " + self._nombre + ", Cedula: " + self._cedula
 
-    def sumaCedula(self):
+    @staticmethod
+    def sumaCedula(cedula):
         suma = 0
-        for i in self._cedula:
+        for i in cedula:
             suma += int(i)
         return suma

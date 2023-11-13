@@ -1,3 +1,6 @@
+import networkx as nx
+from matplotlib import pyplot as plt
+
 from BT.BinaryTree import BinaryTree
 from BT.BinarySearchTree import BinarySearchTree
 from Usuario import Usuario
@@ -48,6 +51,36 @@ def max(T, v):
     else:
         return v.getData()
 
+
+# Métodos para dibujar el árbol
+def add_edges(root, graph, pos, x=0, y=0, layer=1, dx=1.0, dy=1.0):
+    if root is not None:
+        pos[root.getData()] = (x, -layer)
+        if root.getLeft() is not None:
+            graph.add_edge(root.getData(), root.getLeft().getData())
+            add_edges(root.getLeft(), graph, pos, x - dx / 2, y - dy, layer + 1, dx / 2, dy)
+        if root.getRight() is not None:
+            graph.add_edge(root.getData(), root.getRight().getData())
+            add_edges(root.getRight(), graph, pos, x + dx / 2, y - dy, layer + 1, dx / 2, dy)
+
+
+def draw_binary_tree(tree):
+    graph = nx.Graph()
+    pos = {}
+    add_edges(tree.root(), graph, pos)
+
+    options = {
+        "node_color": "skyblue",
+        "node_size": 2000,
+        "with_labels": True,
+        "font_size": 10,
+        "font_color": "black",
+        "font_weight": "bold",
+        "width": 2,
+    }
+
+    nx.draw(graph, pos, **options)
+    plt.show()
 
 
 # Clase de pruebas de las clases BinaryTree y BinarySearchTree
@@ -128,14 +161,18 @@ class Test:
 # Clase principal
 class Main:
     opcion = ""
-    arbol = BinaryTree()
     bst = BinarySearchTree()
 
     while opcion != "3":
         print("\nMenú:")
-        print("1. Agregar usuario")
-        print("2. Ver árbol")
-        print("3. Salir")
+        print("1. Insertar nuevo usuario")
+        print("2. Eliminar usuario")
+        print("3. Buscar usuario por cédula")
+        print("4. Usuario con mayor cédula")
+        print("5. Usuario con menor cédula")
+        print("6. Ver árbol")
+        print("7. Recorrido Inorder")
+        print("8. Salir")
 
         opcion = input("Seleccione una opción: ")
 
@@ -143,32 +180,66 @@ class Main:
             nombre = input("Ingrese el nombre del usuario: ")
             cedula = input("Ingrese la cédula del usuario: ")
             usuario = Usuario(nombre, cedula)
-            k = usuario.sumaCedula()
+            k = Usuario.sumaCedula(usuario.getCedula())
             bst.insert(usuario, k)
 
         elif opcion == "2":
-            print("\nÁrbol de usuarios en Preorder:")
-            lista = Preorder(bst, bst.root())
-            print(lista)
+            cedula = input("Ingrese la cédula del usuario a eliminar: ")
+            if bst.find(Usuario.sumaCedula(cedula)) is not None:
+                bst.remove(Usuario.sumaCedula(cedula))
+                print(f"Usuario con cédula {cedula} eliminado con éxito.")
 
         elif opcion == "3":
+            cedula = input("Ingrese la cédula del usuario a buscar: ")
+            if bst.find(Usuario.sumaCedula(cedula)) is not None:
+                print(f"Usuario con cédula {cedula} encontrado.")
+                print(bst.find(Usuario.sumaCedula(cedula)).getData())
+            else:
+                print(f"Usuario con cédula {cedula} no encontrado.")
+
+        elif opcion == "4":
+            bst.maxNode(bst.root())
+            print(f"Usuario con mayor cédula: {bst.maxNode(bst.root()).getData()}")
+
+        elif opcion == "5":
+            bst.minNode(bst.root())
+            print(f"Usuario con menor cédula: {bst.minNode(bst.root()).getData()}")
+
+        elif opcion == "6":
+            draw_binary_tree(bst)
+
+        elif opcion == "7":
+            print("Recorrido Inorder:")
+            Inorder(bst, bst.root())
+
+        elif opcion == "8":
             print("Saliendo del programa. ¡Hasta luego!")
+            break
 
         else:
             print("Opción no válida. Por favor, seleccione un número dentro del rango de posibiliades.")
 
 
-# TODO 1: Implementar el método insert de la clase BinarySearchTree
-# TODO 2: Implementar el método remove de la clase BinarySearchTree
-# TODO 3: Implementar el método searchObject de la clase BinarySearchTree
-# TODO 4: Implementar el método máximo de la clase BinarySearchTree
-# TODO 5: Implementar el método minimo de la clase BinarySearchTree
-# TODO 6: Implementar el método mostrarArbol de la clase BinarySearchTree
-# TODO 7: Implementar el método inorder de la clase BinarySearchTree
-
 # Ejecutar el programa
 if __name__ == "__main__":
-    print("Pruebas de la clase BinaryTree:")
+
+    # Ejemplo de uso de impresión de un árbol binario:
+    # Crear un árbol binario
+    tree = BinaryTree()
+    tree.addRoot(1)
+    root = tree.root()
+    tree.insertLeft(root, 2)
+    tree.insertRight(root, 3)
+    tree.insertLeft(tree.left(root), 4)
+    tree.insertRight(tree.left(root), 5)
+    tree.insertLeft(tree.right(root), 6)
+    tree.insertRight(tree.right(root), 7)
+    tree.insertLeft(tree.left(tree.left(root)), 8)
+    tree.insertRight(tree.left(tree.left(root)), 9)
+
+    draw_binary_tree(tree)
+
+    print("\nPruebas de la clase BinaryTree:")
     Test.test_binary_tree()
     print("\nPruebas de la clase BinarySearchTree:")
     Test.test_binary_search_tree()
