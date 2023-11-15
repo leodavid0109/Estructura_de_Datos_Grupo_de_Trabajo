@@ -11,34 +11,33 @@ def Preorder(T, v):
     preorder_list.append(v.getData())
     print(v.getData())  # visit(v)
     if T.hasLeft(v):
-        preorder_list_left = (T, T.left(v))  # recursive call on left child
+        preorder_list_left = Preorder(T, T.left(v))  # recursive call on left child
         preorder_list += preorder_list_left
     if T.hasRight(v):
-        preorder_list_right = (T, T.right(v))
+        preorder_list_right = Preorder(T, T.right(v))
         preorder_list += preorder_list_right
     return preorder_list
 
 
 def Inorder(T, v):
-    preorder_list = []
+    inorder_list = []
     if T.hasLeft(v):
-        preorder_list_left = (T, T.left(v))  # recursive call on left child
-        preorder_list += preorder_list_left
-    preorder_list.append(v.getData())
-    print(v.getData())  # visit(v)
+        inorder_list_left = Inorder(T, T.left(v))  # recursive call on left child
+        inorder_list += inorder_list_left
+    inorder_list.append(v.getData())  # visit(v)
     if T.hasRight(v):
-        preorder_list_right = (T, T.right(v))  # recursive call on right child
-        preorder_list += preorder_list_right
-    return preorder_list
+        inorder_list_right = Inorder(T, T.right(v))  # recursive call on right child
+        inorder_list += inorder_list_right
+    return inorder_list
 
 
 def Posorder(T, v):
     preorder_list = []
     if T.hasLeft(v):
-        preorder_list_left = (T, T.left(v))  # recursive call on left child
+        preorder_list_left = Posorder(T, T.left(v))  # recursive call on left child
         preorder_list += preorder_list_left
     if T.hasRight(v):
-        preorder_list_right = (T, T.right(v))  # recursive call on right child
+        preorder_list_right = Posorder(T, T.right(v))  # recursive call on right child
         preorder_list += preorder_list_right
     preorder_list.append(v.getData())
     print(v.getData())  # visit(v)
@@ -65,13 +64,17 @@ def add_edges(root, graph, pos, x=0, y=0, layer=1, dx=1.0, dy=1.0):
 
 
 def draw_binary_tree(tree):
+    if tree.isEmpty():
+        print("El árbol está vacío.")
+        return
     graph = nx.Graph()
     pos = {}
+    graph.add_node(tree.root().getData())
     add_edges(tree.root(), graph, pos)
 
     options = {
         "node_color": "skyblue",
-        "node_size": 2000,
+        "node_size": 6000,
         "with_labels": True,
         "font_size": 10,
         "font_color": "black",
@@ -163,11 +166,19 @@ class Main:
     opcion = ""
     bst = BinarySearchTree()
 
-    while opcion != "3":
+    # Creación Árbol auxiliar de la práctica
+    # bst.insert(Usuario("Juan", "10101013"), Usuario.sumaCedula("10101013"))
+    # bst.insert(Usuario("Pablo", "10001011"), Usuario.sumaCedula("10001011"))
+    # bst.insert(Usuario("Maria", "10101015"), Usuario.sumaCedula("10101015"))
+    # bst.insert(Usuario("Ana", "1010000"), Usuario.sumaCedula("1010000"))
+    # bst.insert(Usuario("Diana", "10111105"), Usuario.sumaCedula("10111105"))
+    # bst.insert(Usuario("Mateo", "10110005"), Usuario.sumaCedula("10110005"))
+
+    while opcion != "8":
         print("\nMenú:")
         print("1. Insertar nuevo usuario")
         print("2. Eliminar usuario")
-        print("3. Buscar usuario por cédula")
+        print("3. Buscar usuario por clave")
         print("4. Usuario con mayor cédula")
         print("5. Usuario con menor cédula")
         print("6. Ver árbol")
@@ -184,33 +195,49 @@ class Main:
             bst.insert(usuario, k)
 
         elif opcion == "2":
-            cedula = input("Ingrese la cédula del usuario a eliminar: ")
-            if bst.find(Usuario.sumaCedula(cedula)) is not None:
-                bst.remove(Usuario.sumaCedula(cedula))
-                print(f"Usuario con cédula {cedula} eliminado con éxito.")
+            clave = input("Ingrese la clave del usuario a eliminar: ")
+            if bst.find(int(clave)) is not None:
+                aux = bst.remove(int(clave))
+                print(f"Usuario con clave {clave} eliminado con éxito.")
 
         elif opcion == "3":
-            cedula = input("Ingrese la cédula del usuario a buscar: ")
-            if bst.find(Usuario.sumaCedula(cedula)) is not None:
-                print(f"Usuario con cédula {cedula} encontrado.")
-                print(bst.find(Usuario.sumaCedula(cedula)).getData())
+            if bst.isEmpty():
+                print("El árbol está vacío.")
+                continue
+            clave = input("Ingrese la clave del usuario a buscar: ")
+            if bst.find(int(clave)) is not None:
+                print(f"Usuario con cédula {clave} encontrado.")
+                print(bst.find(int(clave)).getData())
             else:
-                print(f"Usuario con cédula {cedula} no encontrado.")
+                print(f"Usuario con cédula {clave} no encontrado.")
 
         elif opcion == "4":
+            if bst.isEmpty():
+                print("El árbol está vacío.")
+                continue
             bst.maxNode(bst.root())
-            print(f"Usuario con mayor cédula: {bst.maxNode(bst.root()).getData()}")
+            print(f"Usuario con mayor cédula: \n{bst.maxNode(bst.root()).getData()}")
 
         elif opcion == "5":
+            if bst.isEmpty():
+                print("El árbol está vacío.")
+                continue
             bst.minNode(bst.root())
-            print(f"Usuario con menor cédula: {bst.minNode(bst.root()).getData()}")
+            print(f"Usuario con menor cédula: \n{bst.minNode(bst.root()).getData()}")
 
         elif opcion == "6":
             draw_binary_tree(bst)
 
         elif opcion == "7":
+            if bst.isEmpty():
+                print("El árbol está vacío.")
+                continue
             print("Recorrido Inorder:")
-            Inorder(bst, bst.root())
+            inorder = Inorder(bst, bst.root())
+            j = 1
+            for i in inorder:
+                print(f"Paso {j}: {i.getKey()}")
+                j += 1
 
         elif opcion == "8":
             print("Saliendo del programa. ¡Hasta luego!")
@@ -222,26 +249,25 @@ class Main:
 
 # Ejecutar el programa
 if __name__ == "__main__":
-
     # Ejemplo de uso de impresión de un árbol binario:
     # Crear un árbol binario
-    tree = BinaryTree()
-    tree.addRoot(1)
-    root = tree.root()
-    tree.insertLeft(root, 2)
-    tree.insertRight(root, 3)
-    tree.insertLeft(tree.left(root), 4)
-    tree.insertRight(tree.left(root), 5)
-    tree.insertLeft(tree.right(root), 6)
-    tree.insertRight(tree.right(root), 7)
-    tree.insertLeft(tree.left(tree.left(root)), 8)
-    tree.insertRight(tree.left(tree.left(root)), 9)
+    # tree = BinaryTree()
+    # tree.addRoot(1)
+    # root = tree.root()
+    # tree.insertLeft(root, 2)
+    # tree.insertRight(root, 3)
+    # tree.insertLeft(tree.left(root), 4)
+    # tree.insertRight(tree.left(root), 5)
+    # tree.insertLeft(tree.right(root), 6)
+    # tree.insertRight(tree.right(root), 7)
+    # tree.insertLeft(tree.left(tree.left(root)), 8)
+    # tree.insertRight(tree.left(tree.left(root)), 9)
 
-    draw_binary_tree(tree)
+    # draw_binary_tree(tree)
 
-    print("\nPruebas de la clase BinaryTree:")
-    Test.test_binary_tree()
-    print("\nPruebas de la clase BinarySearchTree:")
-    Test.test_binary_search_tree()
-    print("\nEjecutando programa principal:")
+    # print("\nPruebas de la clase BinaryTree:")
+    # Test.test_binary_tree()
+    # print("\nPruebas de la clase BinarySearchTree:")
+    # Test.test_binary_search_tree()
+    # print("\nEjecutando programa principal:")
     Main()

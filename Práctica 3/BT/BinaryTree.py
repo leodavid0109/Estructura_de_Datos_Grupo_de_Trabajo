@@ -41,7 +41,7 @@ class BinaryTree:
             Q = Queue()
             Q.enqueue(self._root)
             temp = self._root
-            while not Q.isEmpty() and self.left(Q.first()) != v and self.right(Q.first()) != v:
+            while (not Q.isEmpty()) and (self.left(temp) != v) and (self.right(temp) != v):
                 temp = Q.dequeue()
                 if self.hasLeft(temp):
                     Q.enqueue(self.left(temp))
