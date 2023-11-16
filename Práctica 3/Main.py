@@ -167,12 +167,12 @@ class Main:
     bst = BinarySearchTree()
 
     # Creación Árbol auxiliar de la práctica
-    # bst.insert(Usuario("Juan", "10101013"), Usuario.sumaCedula("10101013"))
-    # bst.insert(Usuario("Pablo", "10001011"), Usuario.sumaCedula("10001011"))
-    # bst.insert(Usuario("Maria", "10101015"), Usuario.sumaCedula("10101015"))
-    # bst.insert(Usuario("Ana", "1010000"), Usuario.sumaCedula("1010000"))
-    # bst.insert(Usuario("Diana", "10111105"), Usuario.sumaCedula("10111105"))
-    # bst.insert(Usuario("Mateo", "10110005"), Usuario.sumaCedula("10110005"))
+    bst.insert(Usuario("Juan", "10101013"), Usuario.sumaCedula("10101013"))
+    bst.insert(Usuario("Pablo", "10001011"), Usuario.sumaCedula("10001011"))
+    bst.insert(Usuario("Maria", "10101015"), Usuario.sumaCedula("10101015"))
+    bst.insert(Usuario("Ana", "1010000"), Usuario.sumaCedula("1010000"))
+    bst.insert(Usuario("Diana", "10111105"), Usuario.sumaCedula("10111105"))
+    bst.insert(Usuario("Mateo", "10110005"), Usuario.sumaCedula("10110005"))
 
     while opcion != "8":
         print("\nMenú:")
