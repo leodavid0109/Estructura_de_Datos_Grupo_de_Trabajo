@@ -4,7 +4,7 @@ import os
 import heapq
 
 # Lee el archivo CSV
-data = pd.read_csv(os.path.join('proyecto', 'Dataset', 'Datos vias Colombia.csv'))
+data = pd.read_csv(os.path.join('Dataset', 'Datos vias Colombia.csv'))
 
 # Obtiene la lista de ciudades únicas
 cities = sorted(set(data['Origen'].unique()) | set(data['Destino'].unique()))
