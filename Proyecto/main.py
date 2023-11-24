@@ -51,48 +51,6 @@ def print_matrix(matrix, title):
     plt.colorbar(cax)
     plt.show()
 
-def verificar_conexion(ciudad_a, ciudad_b, distance_matrix, cities):
-    if ciudad_a not in cities or ciudad_b not in cities:
-        print("Al menos una de las ciudades ingresadas no existe en los datos proporcionados.")
-        return False
-    
-    idx_ciudad_a = city_indices[ciudad_a]
-    idx_ciudad_b = city_indices[ciudad_b]
-
-    # Inicializa la matriz de caminos
-    paths_matrix = np.linalg.matrix_power(adj_matrix, 48)
-
-    # Obtiene el número de caminos entre las ciudades de inicio y fin
-    num_paths = paths_matrix[idx_ciudad_a, idx_ciudad_b]
-
-    if num_paths >= 2:
-        print(f"Las ciudades {ciudad_a} y {ciudad_b} están conectadas por más de una carretera.")
-    elif num_paths == 0:
-        print(f"No hay conexión directa entre las ciudades {ciudad_a} y {ciudad_b}.")
-    else:
-        print(f"Las ciudades {ciudad_a} y {ciudad_b} están conectadas por una única carretera.")
-
-    #
-    # if distance_matrix[idx_ciudad_a][idx_ciudad_b] != float('inf'):
-    #     # Si la distancia entre las ciudades es finita, están conectadas por al menos una carretera.
-    #     # Verificar si hay una única conexión directa entre ellas.
-    #     unique_connection = True
-    #     for idx, distance in enumerate(distance_matrix[idx_ciudad_a]):
-    #         if distance != float('inf') and idx != idx_ciudad_b:
-    #             # Si hay otra conexión diferente a la ciudad B, no es una conexión única.
-    #             unique_connection = False
-    #             break
-    #
-    #     if unique_connection:
-    #         print(f"Las ciudades {ciudad_a} y {ciudad_b} están conectadas por una única carretera.")
-    #         return True
-    #     else:
-    #         print(f"Las ciudades {ciudad_a} y {ciudad_b} están conectadas por más de una carretera.")
-    #         return False
-    # else:
-    #     print(f"No hay conexión directa entre las ciudades {ciudad_a} y {ciudad_b}.")
-    #     return False
-
 def dijkstra(graph, start, end, weights):
     # Inicialización de variables
     distances = {node: float('inf') for node in graph}
@@ -129,6 +87,36 @@ def camino_mas_corto(ciudad_a, ciudad_b, matrix, cities, city_indices, unidades)
     
     print(f"El camino más corto entre {ciudad_a} y {ciudad_b} es de {int(shortest_distance)} {unidades}.")
 
+def find_all_paths(graph, start, end, path=[], found_paths=[]):
+    path = path + [start]
+
+    if start == end:
+        found_paths.append(path)
+        if len(found_paths) == 2:
+            return found_paths
+
+    for node in range(len(graph[start])):
+        if graph[start][node] != float('inf') and node not in path:
+            new_paths = find_all_paths(graph, node, end, path, found_paths)
+            if len(found_paths) == 2:
+                return found_paths
+            
+    return found_paths
+
+def count_unique_connections_between_cities(city1, city2):
+    start = city_indices[city1]
+    end = city_indices[city2]
+
+    found_paths = find_all_paths(distance_matrix, start, end)
+    
+    non_repeated_vertex_paths = [
+        path for path in found_paths if len(set(path)) == len(path)
+    ]
+    
+    num_unique_connections = len(non_repeated_vertex_paths)
+    
+    return num_unique_connections == 1
+
 def mostrar_menu():
     print("\nMenu:")
     print("1. Verificar si dos ciudades están conectadas")
@@ -146,9 +134,14 @@ while True:
         print("¡Hasta luego!")
         break
     elif opcion == '1':
-        ciudad_1 = input("Ingrese el nombre de la primera ciudad: ")
-        ciudad_2 = input("Ingrese el nombre de la segunda ciudad: ")
-        verificar_conexion(ciudad_1, ciudad_2, distance_matrix, cities)
+        city1 = input("Ingrese el nombre de la primera ciudad: ")
+        city2 = input("Ingrese el nombre de la segunda ciudad: ")
+        is_unique_connection = count_unique_connections_between_cities(city1, city2)
+
+        if is_unique_connection:
+            print(f"La conexión entre {city1} y {city2} es única.")
+        else:
+            print(f"Hay múltiples conexiones entre {city1} y {city2}.")
     elif opcion == '2':
         ciudad_1 = input("Ingrese el nombre de la primera ciudad: ")
         ciudad_2 = input("Ingrese el nombre de la segunda ciudad: ")
