@@ -63,6 +63,15 @@ def draw_graph(G):
     nx.draw(G, pos, **options)
     plt.show()
 
+def unicidad_caminos(G, ciudad_1, ciudad_2):
+    ad = G.adj
+    # Se obtienen los caminos entre las ciudades
+    caminos = list(nx.all_simple_paths(G, ciudad_1, ciudad_2))
+    # Se verifica que exista un único camino entre las ciudades
+    if len(caminos) == 1:
+        return True
+    else:
+        return False
 
 # Clase Principal
 class Main:
@@ -83,7 +92,8 @@ class Main:
         if opcion == "1":
             ciudad_1 = input("Ingrese el nombre de la primera ciudad: ")
             ciudad_2 = input("Ingrese el nombre de la segunda ciudad: ")
-            if G.has_edge(ciudad_1, ciudad_2):
+            verificacion = unicidad_caminos(G, ciudad_1, ciudad_2)
+            if verificacion:
                 print("Las ciudades están conectadas por una única carretera.")
             else:
                 print("Las ciudades no están conectadas por una única carretera.")
