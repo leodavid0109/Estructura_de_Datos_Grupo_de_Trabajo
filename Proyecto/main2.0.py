@@ -22,19 +22,45 @@ def impresion_camino(camino):
         else:
             print(camino[i] + " -> ", end="")
 
+def custom_layout(G):
+    # Definir el espacio entre líneas y nodos por línea
+    line_spacing = 2.0
+    nodes_per_line = 10
+
+    pos = {}
+    current_line = 0
+    current_node_in_line = 0
+
+    for node in G.nodes():
+        # Calcular las coordenadas x e y para el nodo
+        x = current_node_in_line
+        y = -current_line * line_spacing
+
+        pos[node] = (x, y)
+
+        # Mover a la siguiente línea después de 10 nodos
+        current_node_in_line += 1
+        if current_node_in_line == nodes_per_line:
+            current_line += 1
+            current_node_in_line = 0
+
+    return pos
 
 def draw_graph(G):
+    # Utilizar spring_layout para disponer los nodos en una cuadrícula
+    pos = custom_layout(G)
+
     options = {
         "node_color": "skyblue",
-        "node_size": 1000,
+        "node_size": 500,
         "with_labels": True,
-        "font_size": 10,
+        "font_size": 5,
         "font_color": "black",
         "font_weight": "bold",
         "width": 2,
     }
 
-    nx.draw(G, **options)
+    nx.draw(G, pos, **options)
     plt.show()
 
 
@@ -57,10 +83,11 @@ class Main:
         if opcion == "1":
             ciudad_1 = input("Ingrese el nombre de la primera ciudad: ")
             ciudad_2 = input("Ingrese el nombre de la segunda ciudad: ")
+            nx.
             if G.has_edge(ciudad_1, ciudad_2):
-                print("Las ciudades están conectadas.")
+                print("Las ciudades están conectadas por una única carretera.")
             else:
-                print("Las ciudades no están conectadas.")
+                print("Las ciudades no están conectadas por una única carretera.")
 
         elif opcion == "2":
             ciudad_1 = input("Ingrese el nombre de la primera ciudad: ")

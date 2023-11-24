@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import os
 import heapq
+import matplotlib.pyplot as plt
 
 # Lee el archivo CSV
 data = pd.read_csv(os.path.join('Dataset', 'Datos vias Colombia.csv'))
@@ -31,6 +32,24 @@ for _, row in data.iterrows():
     
     time_matrix[origin_idx][dest_idx] = time
     time_matrix[dest_idx][origin_idx] = time # La matriz es simétrica
+
+# Función para imprimir una matriz en formato de tabla
+def print_matrix(matrix, title):
+    fig, ax = plt.subplots(figsize=(20, 20))  # Ajusta el tamaño de la figura según tus necesidades
+    cax = ax.matshow(matrix, cmap='viridis')
+
+    for i in range(matrix.shape[0]):
+        for j in range(matrix.shape[1]):
+            if matrix[i, j] == float('inf'):
+                ax.text(j, i, '0', ha='center', va='center', fontsize=10)
+            else:
+                ax.text(j, i, f'{int(matrix[i, j])}', ha='center', va='center', fontsize=10)
+
+    plt.xticks(range(matrix.shape[1]), cities, rotation=90, fontsize=10)
+    plt.yticks(range(matrix.shape[0]), cities, fontsize=10)
+    plt.title(title, fontsize=12)
+    plt.colorbar(cax)
+    plt.show()
 
 def verificar_conexion(ciudad_a, ciudad_b, distance_matrix, cities):
     if ciudad_a not in cities or ciudad_b not in cities:
@@ -97,10 +116,12 @@ def camino_mas_corto(ciudad_a, ciudad_b, matrix, cities, city_indices, unidades)
     print(f"El camino más corto entre {ciudad_a} y {ciudad_b} es de {int(shortest_distance)} {unidades}.")
 
 def mostrar_menu():
-    print("Menu:")
+    print("\nMenu:")
     print("1. Verificar si dos ciudades están conectadas")
     print("2. Encontrar el camino más corto en kilómetros")
     print("3. Encontrar el camino más corto en tiempo")
+    print("4. Ver matriz de adyacencia de distancias")
+    print("5. Ver matriz de adyacencia de tiempos")
     print("0. Salir")
 
 while True:
@@ -122,13 +143,9 @@ while True:
         ciudad_1 = input("Ingrese el nombre de la primera ciudad: ")
         ciudad_2 = input("Ingrese el nombre de la segunda ciudad: ")
         camino_mas_corto(ciudad_1, ciudad_2, time_matrix, cities, city_indices, "minutos")
+    elif opcion == '4':
+        print_matrix(distance_matrix, 'Distance Matrix')
+    elif opcion == '5':
+        print_matrix(time_matrix, 'Time Matrix')
     else:
         print("Opción inválida. Por favor, ingrese un número válido.")
-
-# Mostrar las matrices de distancia y tiempo
-# np.set_printoptions(threshold=np.inf)
-# print("Matriz de distancias:")
-# print(distance_matrix)
-
-# print("\nMatriz de tiempos:")
-# print(time_matrix)
