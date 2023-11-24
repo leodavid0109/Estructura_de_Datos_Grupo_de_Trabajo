@@ -58,26 +58,40 @@ def verificar_conexion(ciudad_a, ciudad_b, distance_matrix, cities):
     
     idx_ciudad_a = city_indices[ciudad_a]
     idx_ciudad_b = city_indices[ciudad_b]
-    
-    if distance_matrix[idx_ciudad_a][idx_ciudad_b] != float('inf'):
-        # Si la distancia entre las ciudades es finita, están conectadas por al menos una carretera.
-        # Verificar si hay una única conexión directa entre ellas.
-        unique_connection = True
-        for idx, distance in enumerate(distance_matrix[idx_ciudad_a]):
-            if distance != float('inf') and idx != idx_ciudad_b:
-                # Si hay otra conexión diferente a la ciudad B, no es una conexión única.
-                unique_connection = False
-                break
-        
-        if unique_connection:
-            print(f"Las ciudades {ciudad_a} y {ciudad_b} están conectadas por una única carretera.")
-            return True
-        else:
-            print(f"Las ciudades {ciudad_a} y {ciudad_b} están conectadas por más de una carretera.")
-            return False
-    else:
+
+    # Inicializa la matriz de caminos
+    paths_matrix = np.linalg.matrix_power(adj_matrix, 48)
+
+    # Obtiene el número de caminos entre las ciudades de inicio y fin
+    num_paths = paths_matrix[idx_ciudad_a, idx_ciudad_b]
+
+    if num_paths >= 2:
+        print(f"Las ciudades {ciudad_a} y {ciudad_b} están conectadas por más de una carretera.")
+    elif num_paths == 0:
         print(f"No hay conexión directa entre las ciudades {ciudad_a} y {ciudad_b}.")
-        return False
+    else:
+        print(f"Las ciudades {ciudad_a} y {ciudad_b} están conectadas por una única carretera.")
+
+    #
+    # if distance_matrix[idx_ciudad_a][idx_ciudad_b] != float('inf'):
+    #     # Si la distancia entre las ciudades es finita, están conectadas por al menos una carretera.
+    #     # Verificar si hay una única conexión directa entre ellas.
+    #     unique_connection = True
+    #     for idx, distance in enumerate(distance_matrix[idx_ciudad_a]):
+    #         if distance != float('inf') and idx != idx_ciudad_b:
+    #             # Si hay otra conexión diferente a la ciudad B, no es una conexión única.
+    #             unique_connection = False
+    #             break
+    #
+    #     if unique_connection:
+    #         print(f"Las ciudades {ciudad_a} y {ciudad_b} están conectadas por una única carretera.")
+    #         return True
+    #     else:
+    #         print(f"Las ciudades {ciudad_a} y {ciudad_b} están conectadas por más de una carretera.")
+    #         return False
+    # else:
+    #     print(f"No hay conexión directa entre las ciudades {ciudad_a} y {ciudad_b}.")
+    #     return False
 
 def dijkstra(graph, start, end, weights):
     # Inicialización de variables

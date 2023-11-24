@@ -83,7 +83,6 @@ class Main:
         if opcion == "1":
             ciudad_1 = input("Ingrese el nombre de la primera ciudad: ")
             ciudad_2 = input("Ingrese el nombre de la segunda ciudad: ")
-            nx.
             if G.has_edge(ciudad_1, ciudad_2):
                 print("Las ciudades están conectadas por una única carretera.")
             else:
