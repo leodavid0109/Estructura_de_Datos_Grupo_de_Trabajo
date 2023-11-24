@@ -87,8 +87,6 @@ def camino_mas_corto(ciudad_a, ciudad_b, matrix, cities, city_indices, unidades)
     
     print(f"El camino más corto entre {ciudad_a} y {ciudad_b} es de {int(shortest_distance)} {unidades}.")
 
-
-
 def find_all_paths(graph, start, end, path=[], found_paths=[]):
     path = path + [start]
 
