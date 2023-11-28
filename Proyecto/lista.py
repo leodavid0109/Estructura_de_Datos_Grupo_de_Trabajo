@@ -22,6 +22,7 @@ def impresion_camino(camino):
         else:
             print(camino[i] + " -> ", end="")
 
+
 def custom_layout(G):
     # Definir el espacio entre líneas y nodos por línea
     line_spacing = 2.0
@@ -46,6 +47,7 @@ def custom_layout(G):
 
     return pos
 
+
 def draw_graph(G):
     # Utilizar spring_layout para disponer los nodos en una cuadrícula
     pos = custom_layout(G)
@@ -63,24 +65,15 @@ def draw_graph(G):
     nx.draw(G, pos, **options)
     plt.show()
 
-def unicidad_caminos(G, ciudad_1, ciudad_2):
-    ad = G.adj
-    # Se obtienen los caminos entre las ciudades
-    caminos = list(nx.all_simple_paths(G, ciudad_1, ciudad_2))
-    # Se verifica que exista un único camino entre las ciudades
-    if len(caminos) == 1:
-        return True
-    else:
-        return False
 
 # Clase Principal
-class Main:
+def Lista():
     opcion = ""
     G = lectura_archivo("Dataset/Datos vias Colombia 2.csv")
 
     while opcion != "0":
         print("\nMenu:")
-        print("1. Verificar si dos ciudades están conectadas")
+        print("1. Verificar si dos ciudades están conectadas directamente")
         print("2. Encontrar el camino más corto en kilómetros")
         print("3. Encontrar el camino más corto en tiempo")
         print("4. Ver grafo")
@@ -92,25 +85,32 @@ class Main:
         if opcion == "1":
             ciudad_1 = input("Ingrese el nombre de la primera ciudad: ")
             ciudad_2 = input("Ingrese el nombre de la segunda ciudad: ")
-            verificacion = unicidad_caminos(G, ciudad_1, ciudad_2)
-            if verificacion:
-                print("Las ciudades están conectadas por una única carretera.")
+            if not G.has_node(ciudad_1) or not G.has_node(ciudad_2):
+                print("Al menos una de las ciudades ingresadas no existe en los datos proporcionados.")
+            elif G.has_edge(ciudad_1, ciudad_2):
+                print(f"Las ciudades {ciudad_1} y {ciudad_2} están conectadas por una carretera directa.")
             else:
-                print("Las ciudades no están conectadas por una única carretera.")
+                print(f"Las ciudades {ciudad_1} y {ciudad_2} no están conectadas por una carretera directa.")
 
         elif opcion == "2":
             ciudad_1 = input("Ingrese el nombre de la primera ciudad: ")
             ciudad_2 = input("Ingrese el nombre de la segunda ciudad: ")
-            longitud_camino, camino_mas_corto = nx.single_source_dijkstra(G, ciudad_1, ciudad_2, weight="distancia")
-            print(f"Camino más corto entre {ciudad_1} y {ciudad_2}: {longitud_camino} km")
-            impresion_camino(camino_mas_corto)
+            if not G.has_node(ciudad_1) or not G.has_node(ciudad_2):
+                print("Al menos una de las ciudades ingresadas no existe en los datos proporcionados.")
+            else:
+                longitud_camino, camino_mas_corto = nx.single_source_dijkstra(G, ciudad_1, ciudad_2, weight="distancia")
+                print(f"Camino más corto entre {ciudad_1} y {ciudad_2}: {longitud_camino} km")
+                impresion_camino(camino_mas_corto)
 
         elif opcion == "3":
             ciudad_1 = input("Ingrese el nombre de la primera ciudad: ")
             ciudad_2 = input("Ingrese el nombre de la segunda ciudad: ")
-            longitud_camino, camino_mas_corto = nx.single_source_dijkstra(G, ciudad_1, ciudad_2, weight="tiempo")
-            print(f"Camino más corto entre {ciudad_1} y {ciudad_2}: {longitud_camino} minutos")
-            impresion_camino(camino_mas_corto)
+            if not G.has_node(ciudad_1) or not G.has_node(ciudad_2):
+                print("Al menos una de las ciudades ingresadas no existe en los datos proporcionados.")
+            else:
+                longitud_camino, camino_mas_corto = nx.single_source_dijkstra(G, ciudad_1, ciudad_2, weight="tiempo")
+                print(f"Camino más corto entre {ciudad_1} y {ciudad_2}: {longitud_camino} minutos")
+                impresion_camino(camino_mas_corto)
 
         elif opcion == "4":
             draw_graph(G)
@@ -120,7 +120,3 @@ class Main:
             # Impresion lista de adyacencia
             for i in ad:
                 print(i + ": " + str(ad[i]))
-
-
-if __name__ == "__main__":
-    Main()
